@@ -10,62 +10,65 @@
   </head>
   <body>
     <div class="app">
-      <main class="menu-view" id="menuView" aria-labelledby="appTitle">
-        <div class="menu-shell">
-          <header class="menu-header">
+      <main class="home-view" id="homeView" aria-labelledby="homeTitle">
+        <div class="screen-shell">
+          <header class="home-header">
             <p class="brand">ScanPlay</p>
-            <h1 id="appTitle">Escaneo visual</h1>
+            <h1 id="homeTitle">ScanPlay</h1>
+            <p class="tagline">Entrena para mirar antes de actuar.</p>
           </header>
 
-          <section class="control-section" aria-labelledby="modeTitle">
-            <h2 id="modeTitle">Estímulo</h2>
-            <div class="mode-switch" id="modeOptions" role="group" aria-label="Tipo de estímulo">
-              <button class="mode-button" type="button" data-mode="color">Colores</button>
-              <button class="mode-button" type="button" data-mode="number">Números</button>
+          <section class="exercise-library" aria-label="Biblioteca de ejercicios">
+            <div class="exercise-grid" id="exerciseCards"></div>
+          </section>
+        </div>
+      </main>
+
+      <main class="config-view" id="configView" aria-labelledby="exerciseTitle" hidden>
+        <div class="screen-shell config-shell">
+          <button class="nav-back" id="backToExercisesButton" type="button">← Ejercicios</button>
+
+          <header class="exercise-header">
+            <p class="brand" id="exerciseKicker">Ejercicio</p>
+            <h1 id="exerciseTitle"></h1>
+            <p class="exercise-description" id="exerciseDescription"></p>
+          </header>
+
+          <section class="exercise-meta" id="exerciseMeta" aria-label="Objetivo y material">
+            <div class="meta-item">
+              <span class="meta-label">Objetivo</span>
+              <p id="exerciseObjective"></p>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Material</span>
+              <p id="exerciseEquipment"></p>
             </div>
           </section>
 
-          <section class="control-section" id="colorSection" aria-labelledby="colorsTitle">
-            <div class="section-line">
-              <h2 id="colorsTitle">Colores</h2>
-              <span class="selection-count" id="colorCount" aria-live="polite"></span>
-            </div>
-            <div class="color-grid" id="colorOptions"></div>
+          <section class="info-section" id="setupSection" aria-labelledby="setupTitle" hidden>
+            <h2 id="setupTitle">Cómo montarlo</h2>
+            <p id="setupText"></p>
           </section>
 
-          <section class="control-section" id="numberSection" aria-labelledby="numbersTitle" hidden>
-            <h2 id="numbersTitle">Rango</h2>
-            <div class="number-range">
-              <label class="number-field">
-                <span>Desde</span>
-                <input id="numberFrom" type="number" inputmode="numeric" min="0" max="99" step="1" value="1">
-              </label>
-              <label class="number-field">
-                <span>Hasta</span>
-                <input id="numberTo" type="number" inputmode="numeric" min="0" max="99" step="1" value="10">
-              </label>
-            </div>
+          <section class="info-section" id="instructionsSection" aria-labelledby="instructionsTitle" hidden>
+            <h2 id="instructionsTitle">Instrucciones</h2>
+            <p id="instructionsText"></p>
           </section>
 
-          <section class="control-section" aria-labelledby="secondsTitle">
-            <h2 id="secondsTitle">Segundos</h2>
-            <div class="option-grid" id="intervalOptions"></div>
-          </section>
-
-          <section class="control-section" aria-labelledby="timeTitle">
-            <h2 id="timeTitle">Tiempo</h2>
-            <div class="option-grid" id="durationOptions"></div>
+          <section class="control-section" aria-labelledby="configTitle">
+            <h2 id="configTitle">Configuración</h2>
+            <div class="config-controls" id="configControls"></div>
           </section>
 
           <p class="validation-message" id="validationMessage" role="status" aria-live="polite"></p>
 
-          <button class="play-button" id="playButton" type="button">▶ PLAY</button>
+          <button class="play-button" id="startButton" type="button">▶ EMPEZAR</button>
         </div>
       </main>
 
       <section class="training-view" id="trainingView" aria-label="Entrenamiento" hidden>
         <button class="back-button" id="backButton" type="button">← Volver</button>
-        <div class="number-stimulus" id="numberStimulus" aria-live="off" hidden></div>
+        <div class="stimulus-root" id="stimulusRoot" aria-live="off"></div>
       </section>
     </div>
   </body>
