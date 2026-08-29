@@ -4,7 +4,24 @@ All notable changes to ScanPlay are documented in this file.
 
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/), and this project uses semantic versioning style labels.
 
-## [v1.1.0] - Unreleased
+## [1.2.0] - Unreleased
+
+### Added
+
+- Exercise library.
+- Exercise home screen.
+- Reactive cone drill.
+- Oriented first-touch drill.
+- Number pass challenge.
+- Conflict/Stroop drill.
+- Sequence memory drill.
+
+### Changed
+
+- Navigation now uses Home, Exercise Configuration, and Training Session levels.
+- Session code separates exercise definitions from stimulus generation.
+
+## [1.1.0]
 
 ### Added
 
@@ -16,7 +33,7 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/), and t
 
 - Session logic now uses a generic stimulus flow shared by colors and numbers.
 
-## [v1.0.0]
+## [1.0.0]
 
 ### Added
 
