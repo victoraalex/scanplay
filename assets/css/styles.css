@@ -1,12 +1,15 @@
 :root {
   --page-bg: #f6f7f9;
-  --ink: #191c16;
-  --muted: #646b62;
-  --line: rgba(25, 28, 22, 0.14);
+  --ink: #151815;
+  --muted: #626a62;
+  --line: rgba(21, 24, 21, 0.14);
   --surface: #ffffff;
-  --accent: #147447;
-  --training-color: #191c16;
-  --training-control-bg: rgba(0, 0, 0, 0.22);
+  --surface-strong: #eef2f6;
+  --accent: #127645;
+  --accent-strong: #0b5e37;
+  --danger: #a3311f;
+  --training-color: #050505;
+  --training-control-bg: rgba(0, 0, 0, 0.24);
   --training-control-fg: #ffffff;
 }
 
@@ -24,17 +27,22 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0;
+  overflow-x: hidden;
   background: var(--page-bg);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   letter-spacing: 0;
 }
 
-button {
-  border: 0;
+button,
+input {
   color: inherit;
   font: inherit;
   letter-spacing: 0;
+}
+
+button {
+  border: 0;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -47,44 +55,52 @@ button {
   min-height: 100dvh;
 }
 
-.menu-view {
+.home-view,
+.config-view {
   min-height: 100vh;
   min-height: 100dvh;
   padding: calc(env(safe-area-inset-top) + 16px) 18px
     calc(env(safe-area-inset-bottom) + 14px);
 }
 
-.menu-shell {
+.screen-shell {
   display: flex;
-  width: min(100%, 460px);
-  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px);
+  width: min(100%, 480px);
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 30px);
   margin: 0 auto;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
-.menu-header {
+.config-shell {
+  gap: 15px;
+}
+
+.home-header,
+.exercise-header {
+  display: grid;
+  gap: 8px;
   padding-top: 4px;
 }
 
 .brand {
-  margin: 0 0 8px;
+  margin: 0;
   color: var(--accent);
-  font-size: 0.9rem;
-  font-weight: 800;
-  letter-spacing: 0;
+  font-size: 0.88rem;
+  font-weight: 850;
   text-transform: uppercase;
 }
 
 h1,
 h2,
+h3,
 p {
   margin: 0;
 }
 
 h1 {
-  font-size: 2.7rem;
-  font-weight: 900;
+  font-size: 2.65rem;
+  font-weight: 950;
   line-height: 0.95;
 }
 
@@ -93,35 +109,121 @@ h2 {
   font-weight: 850;
 }
 
-.control-section {
+h3 {
+  font-size: 1.02rem;
+  font-weight: 900;
+}
+
+.tagline,
+.exercise-description {
+  color: var(--muted);
+  font-size: 1.03rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.exercise-grid {
   display: grid;
   gap: 10px;
 }
 
-.mode-switch {
+.exercise-card {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  padding: 4px;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  min-height: 92px;
+  align-items: center;
+  padding: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.68);
+  background: var(--surface);
+  text-align: left;
+  box-shadow: 0 12px 30px rgba(21, 24, 21, 0.06);
+  transition: transform 140ms ease, border-color 140ms ease;
 }
 
-.mode-button {
-  min-height: 50px;
-  border-radius: 6px;
-  background: transparent;
+.exercise-card:active,
+.nav-back:active,
+.mode-button:active,
+.color-card:active,
+.option-button:active,
+.play-button:active,
+.back-button:active {
+  transform: scale(0.98);
+}
+
+.exercise-card:hover {
+  border-color: rgba(18, 118, 69, 0.35);
+}
+
+.exercise-icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--surface-strong);
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.exercise-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.exercise-copy p {
+  display: -webkit-box;
+  overflow: hidden;
   color: var(--muted);
   font-size: 0.95rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  transition: background 140ms ease, color 140ms ease, transform 140ms ease;
+  font-weight: 650;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.mode-button.is-selected {
-  background: var(--ink);
-  color: #ffffff;
+.nav-back {
+  width: fit-content;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.info-section {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.info-section p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 650;
+  line-height: 1.36;
+}
+
+.control-section,
+.config-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.control-group {
+  display: grid;
+  gap: 10px;
 }
 
 .section-line {
@@ -139,6 +241,32 @@ h2 {
   text-align: right;
 }
 
+.mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.mode-button {
+  min-height: 50px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.94rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: background 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.mode-button.is-selected {
+  background: var(--ink);
+  color: #ffffff;
+}
+
 .color-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -148,16 +276,16 @@ h2 {
 .color-card {
   position: relative;
   display: flex;
-  min-height: 88px;
+  min-height: 84px;
   align-items: flex-end;
   justify-content: flex-start;
   padding: 10px;
   overflow: hidden;
-  border: 2px solid rgba(25, 28, 22, 0.16);
+  border: 2px solid rgba(21, 24, 21, 0.16);
   border-radius: 8px;
   background: var(--color);
   color: var(--color-text);
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   font-weight: 850;
   opacity: 0.38;
   text-align: left;
@@ -173,7 +301,7 @@ h2 {
 }
 
 .color-card.is-selected {
-  border-color: rgba(25, 28, 22, 0.92);
+  border-color: rgba(21, 24, 21, 0.92);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.75);
   opacity: 1;
 }
@@ -183,15 +311,7 @@ h2 {
 }
 
 .color-card[data-light="true"].is-selected::before {
-  border-color: rgba(25, 28, 22, 0.5);
-}
-
-.color-card:active,
-.mode-button:active,
-.option-button:active,
-.play-button:active,
-.back-button:active {
-  transform: scale(0.98);
+  border-color: rgba(21, 24, 21, 0.5);
 }
 
 .color-name {
@@ -210,13 +330,17 @@ h2 {
   gap: 8px;
 }
 
+.option-grid.compact-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .option-button {
   min-height: 50px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
   color: var(--ink);
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   font-weight: 850;
   transition: background 140ms ease, color 140ms ease, transform 140ms ease;
 }
@@ -256,8 +380,7 @@ h2 {
   outline: none;
   background: transparent;
   color: var(--ink);
-  font: inherit;
-  font-size: 2.15rem;
+  font-size: 2rem;
   font-weight: 900;
   line-height: 1;
   appearance: textfield;
@@ -273,7 +396,7 @@ h2 {
 
 .validation-message {
   min-height: 22px;
-  color: #a3311f;
+  color: var(--danger);
   font-size: 0.95rem;
   font-weight: 750;
 }
@@ -284,9 +407,9 @@ h2 {
   border-radius: 8px;
   background: var(--ink);
   color: #ffffff;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 900;
-  box-shadow: 0 14px 34px rgba(25, 28, 22, 0.18);
+  box-shadow: 0 14px 34px rgba(21, 24, 21, 0.18);
   transition: opacity 140ms ease, transform 140ms ease;
 }
 
@@ -311,7 +434,7 @@ h2 {
   position: absolute;
   top: calc(env(safe-area-inset-top) + 14px);
   left: calc(env(safe-area-inset-left) + 14px);
-  z-index: 2;
+  z-index: 3;
   min-height: 42px;
   padding: 0 13px;
   border-radius: 8px;
@@ -323,7 +446,7 @@ h2 {
   -webkit-backdrop-filter: blur(14px);
 }
 
-.number-stimulus {
+.stimulus-root {
   position: absolute;
   inset: 0;
   display: grid;
@@ -331,10 +454,57 @@ h2 {
   padding: calc(env(safe-area-inset-top) + 72px) 20px
     calc(env(safe-area-inset-bottom) + 36px);
   color: #ffffff;
-  font-size: clamp(8rem, 40svh, 18rem);
+  text-align: center;
+}
+
+.number-stimulus,
+.conflict-word,
+.phase-title {
+  max-width: 100%;
+  color: #ffffff;
+  font-size: clamp(7rem, 36svh, 17rem);
   font-weight: 950;
   line-height: 0.9;
-  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.conflict-word {
+  font-size: clamp(4.2rem, 18svh, 9.5rem);
+  text-transform: uppercase;
+}
+
+.phase-title {
+  font-size: clamp(3.4rem, 15svh, 7rem);
+  text-transform: uppercase;
+}
+
+.solution-panel {
+  display: grid;
+  gap: 24px;
+  justify-items: center;
+}
+
+.solution-row {
+  display: flex;
+  max-width: min(100%, 340px);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.solution-dot {
+  width: 34px;
+  height: 34px;
+  border: 2px solid rgba(255, 255, 255, 0.86);
+  border-radius: 999px;
+  background: var(--dot-color);
+}
+
+.solution-arrow {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 1.2rem;
+  font-weight: 900;
 }
 
 body.training-active {
@@ -344,14 +514,31 @@ body.training-active {
   -webkit-user-select: none;
 }
 
-@media (max-width: 360px) {
-  .menu-view {
+@media (max-width: 380px) {
+  .home-view,
+  .config-view {
     padding-right: 14px;
     padding-left: 14px;
   }
 
-  .menu-shell {
-    gap: 18px;
+  .screen-shell {
+    gap: 14px;
+  }
+
+  h1 {
+    font-size: 2.35rem;
+  }
+
+  .exercise-card {
+    grid-template-columns: 48px minmax(0, 1fr);
+    min-height: 82px;
+    padding: 12px;
+  }
+
+  .exercise-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 0.72rem;
   }
 
   .color-grid {
@@ -359,32 +546,24 @@ body.training-active {
   }
 
   .color-card {
-    min-height: 78px;
+    min-height: 76px;
     padding: 8px;
-    font-size: 0.86rem;
-  }
-
-  .option-button {
-    min-height: 48px;
-    font-size: 0.86rem;
-  }
-
-  .mode-button {
-    min-height: 48px;
     font-size: 0.84rem;
   }
 
-  .number-field input {
-    font-size: 1.9rem;
+  .mode-button,
+  .option-button {
+    min-height: 47px;
+    font-size: 0.82rem;
   }
 
-  h1 {
-    font-size: 2.35rem;
+  .number-field input {
+    font-size: 1.8rem;
   }
 }
 
 @media (min-width: 430px) {
   h1 {
-    font-size: 3.05rem;
+    font-size: 3rem;
   }
 }
