@@ -469,8 +469,13 @@ h3 {
 }
 
 .conflict-word {
-  font-size: clamp(4.2rem, 18svh, 9.5rem);
+  font-size: 5.2rem;
+  white-space: nowrap;
   text-transform: uppercase;
+}
+
+.conflict-word.is-long-word {
+  font-size: 3.75rem;
 }
 
 .phase-title {
@@ -560,10 +565,26 @@ body.training-active {
   .number-field input {
     font-size: 1.8rem;
   }
+
+  .conflict-word {
+    font-size: 4.8rem;
+  }
+
+  .conflict-word.is-long-word {
+    font-size: 3.4rem;
+  }
 }
 
 @media (min-width: 430px) {
   h1 {
     font-size: 3rem;
+  }
+
+  .conflict-word {
+    font-size: 5.8rem;
+  }
+
+  .conflict-word.is-long-word {
+    font-size: 4.1rem;
   }
 }

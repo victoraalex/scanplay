@@ -135,7 +135,7 @@ const EXERCISES = [
     id: "passCount",
     name: "Pases por número",
     icon: "123",
-    cardDescription: "Memoriza el número y completa esa cantidad de pases antes de volver a mirar.",
+    cardDescription: "Memoriza el número y completa pases antes de volver a mirar.",
     description:
       "Memoriza el número y completa esa cantidad de pases antes de volver a buscar información.",
     setup:
@@ -175,7 +175,7 @@ const EXERCISES = [
     id: "sequence",
     name: "Secuencia",
     icon: "SEQ",
-    cardDescription: "Memoriza estímulos mientras trabajas con balón y repite la secuencia.",
+    cardDescription: "Memoriza colores y repite la secuencia al terminar.",
     description:
       "Memoriza estímulos mientras trabajas con balón y repite la secuencia al terminar.",
     setup:
@@ -1010,6 +1010,7 @@ function renderConflictStimulus(stimulus) {
   setTrainingSurface("#050505");
   const wordElement = createElement("div", "conflict-word", wordColor.word);
 
+  wordElement.classList.toggle("is-long-word", wordColor.word.length > 6);
   wordElement.style.color = inkColor.hex;
   elements.stimulusRoot.appendChild(wordElement);
 }
