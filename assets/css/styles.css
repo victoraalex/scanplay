@@ -50,8 +50,8 @@ button {
 .menu-view {
   min-height: 100vh;
   min-height: 100dvh;
-  padding: calc(env(safe-area-inset-top) + 18px) 18px
-    calc(env(safe-area-inset-bottom) + 18px);
+  padding: calc(env(safe-area-inset-top) + 16px) 18px
+    calc(env(safe-area-inset-bottom) + 14px);
 }
 
 .menu-shell {
@@ -60,7 +60,7 @@ button {
   min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px);
   margin: 0 auto;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
 }
 
 .menu-header {
@@ -83,7 +83,7 @@ p {
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2.7rem;
   font-weight: 900;
   line-height: 0.95;
 }
@@ -95,7 +95,33 @@ h2 {
 
 .control-section {
   display: grid;
-  gap: 12px;
+  gap: 10px;
+}
+
+.mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.mode-button {
+  min-height: 50px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: background 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.mode-button.is-selected {
+  background: var(--ink);
+  color: #ffffff;
 }
 
 .section-line {
@@ -122,7 +148,7 @@ h2 {
 .color-card {
   position: relative;
   display: flex;
-  min-height: 98px;
+  min-height: 88px;
   align-items: flex-end;
   justify-content: flex-start;
   padding: 10px;
@@ -161,6 +187,7 @@ h2 {
 }
 
 .color-card:active,
+.mode-button:active,
 .option-button:active,
 .play-button:active,
 .back-button:active {
@@ -184,7 +211,7 @@ h2 {
 }
 
 .option-button {
-  min-height: 54px;
+  min-height: 50px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
@@ -199,6 +226,51 @@ h2 {
   color: #ffffff;
 }
 
+.number-range {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.number-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.number-field span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.number-field input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 2.15rem;
+  font-weight: 900;
+  line-height: 1;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.number-field input::-webkit-outer-spin-button,
+.number-field input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 .validation-message {
   min-height: 22px;
   color: #a3311f;
@@ -207,7 +279,7 @@ h2 {
 }
 
 .play-button {
-  min-height: 70px;
+  min-height: 66px;
   margin-top: auto;
   border-radius: 8px;
   background: var(--ink);
@@ -251,6 +323,20 @@ h2 {
   -webkit-backdrop-filter: blur(14px);
 }
 
+.number-stimulus {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: calc(env(safe-area-inset-top) + 72px) 20px
+    calc(env(safe-area-inset-bottom) + 36px);
+  color: #ffffff;
+  font-size: clamp(8rem, 40svh, 18rem);
+  font-weight: 950;
+  line-height: 0.9;
+  text-align: center;
+}
+
 body.training-active {
   overflow: hidden;
   overscroll-behavior: none;
@@ -273,7 +359,7 @@ body.training-active {
   }
 
   .color-card {
-    min-height: 84px;
+    min-height: 78px;
     padding: 8px;
     font-size: 0.86rem;
   }
@@ -283,13 +369,22 @@ body.training-active {
     font-size: 0.86rem;
   }
 
+  .mode-button {
+    min-height: 48px;
+    font-size: 0.84rem;
+  }
+
+  .number-field input {
+    font-size: 1.9rem;
+  }
+
   h1 {
-    font-size: 2.55rem;
+    font-size: 2.35rem;
   }
 }
 
 @media (min-width: 430px) {
   h1 {
-    font-size: 3.35rem;
+    font-size: 3.05rem;
   }
 }
