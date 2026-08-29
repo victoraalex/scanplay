@@ -87,6 +87,8 @@ Al abrir un ejercicio se muestra:
 - `← Ejercicios`;
 - nombre del ejercicio;
 - descripcion;
+- objetivo;
+- material;
 - como montarlo;
 - instrucciones breves;
 - configuracion relevante;
@@ -116,8 +118,10 @@ Un ejercicio describe:
 - id;
 - nombre;
 - descripcion;
+- objetivo;
+- material;
 - instrucciones;
-- material o montaje;
+- montaje;
 - motor de estimulos que utiliza;
 - parametros disponibles;
 - configuracion por defecto.

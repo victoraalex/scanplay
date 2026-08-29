@@ -122,6 +122,33 @@ h3 {
   line-height: 1.35;
 }
 
+.exercise-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 2px 0 4px;
+}
+
+.meta-item {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.meta-label {
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.meta-item p {
+  color: var(--ink);
+  font-size: 0.94rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
 .exercise-grid {
   display: grid;
   gap: 10px;
@@ -544,6 +571,14 @@ body.training-active {
     width: 48px;
     height: 48px;
     font-size: 0.72rem;
+  }
+
+  .exercise-meta {
+    gap: 10px;
+  }
+
+  .meta-item p {
+    font-size: 0.88rem;
   }
 
   .color-grid {

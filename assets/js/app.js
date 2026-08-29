@@ -68,6 +68,8 @@ const EXERCISES = [
     icon: "SCAN",
     cardDescription: "Identifica colores o números mientras trabajas con el balón.",
     description: "Identifica colores o números mientras trabajas con el balón.",
+    objective: "Hábito de escaneo",
+    equipment: ["Balón", "Pared o espacio de conducción"],
     setup:
       "Coloca el móvil detrás o a un lado para obligarte a apartar brevemente la mirada del balón.",
     instructions:
@@ -91,6 +93,8 @@ const EXERCISES = [
     icon: "CONO",
     cardDescription: "Asocia cada estímulo a un cono y conduce hacia el objetivo indicado.",
     description: "Asocia cada estímulo a un cono y conduce hacia el objetivo indicado.",
+    objective: "Escaneo + reacción espacial",
+    equipment: ["Balón", "3-6 conos"],
     setup:
       "Coloca 3-6 conos alrededor de la zona de trabajo y asigna cada color o número a un cono.",
     instructions:
@@ -114,6 +118,8 @@ const EXERCISES = [
     icon: "CTRL",
     cardDescription: "Escanea antes de recibir y orienta el primer control hacia el objetivo.",
     description: "Escanea antes de recibir y orienta el primer control hacia el objetivo.",
+    objective: "Escaneo + primer control",
+    equipment: ["Balón", "Pared", "3-4 conos o puertas"],
     setup:
       "Coloca el móvil detrás de ti y varios conos o puertas a tu alrededor. Pasa contra la pared, escanea mientras viaja el balón y orienta el siguiente control hacia el estímulo indicado.",
     instructions:
@@ -138,6 +144,8 @@ const EXERCISES = [
     cardDescription: "Memoriza el número y completa pases antes de volver a mirar.",
     description:
       "Memoriza el número y completa esa cantidad de pases antes de volver a buscar información.",
+    objective: "Escaneo + memoria durante el pase",
+    equipment: ["Balón", "Pared o compañero"],
     setup:
       "Trabaja con una pared o compañero. El número indica cuántos pases debes completar durante cada reto.",
     instructions:
@@ -158,6 +166,8 @@ const EXERCISES = [
     cardDescription: "Resuelve el conflicto entre palabra y color mientras controlas el balón.",
     description:
       "Resuelve el conflicto entre palabra y color mientras mantienes el control del balón.",
+    objective: "Escaneo + control inhibitorio",
+    equipment: ["Balón", "Pared o espacio de conducción"],
     setup:
       "Coloca el móvil en una posición que te obligue a escanear sin perder el control técnico.",
     instructions:
@@ -178,6 +188,8 @@ const EXERCISES = [
     cardDescription: "Memoriza colores y repite la secuencia al terminar.",
     description:
       "Memoriza estímulos mientras trabajas con balón y repite la secuencia al terminar.",
+    objective: "Escaneo + memoria de información",
+    equipment: ["Balón", "3-6 conos"],
     setup:
       "Asigna colores a conos. Mientras aparece la secuencia, conduce o pasa; cuando veas REPITE, reproduce físicamente el orden.",
     instructions:
@@ -466,6 +478,8 @@ function renderExerciseConfig() {
 
   elements.exerciseTitle.textContent = exercise.name;
   elements.exerciseDescription.textContent = exercise.description;
+  elements.exerciseObjective.textContent = exercise.objective;
+  elements.exerciseEquipment.textContent = exercise.equipment.join(" + ");
   elements.setupText.textContent = exercise.setup || "";
   elements.setupSection.hidden = !exercise.setup;
   elements.instructionsText.textContent = exercise.instructions || "";
@@ -1120,6 +1134,8 @@ function init() {
     backToExercisesButton: document.getElementById("backToExercisesButton"),
     exerciseTitle: document.getElementById("exerciseTitle"),
     exerciseDescription: document.getElementById("exerciseDescription"),
+    exerciseObjective: document.getElementById("exerciseObjective"),
+    exerciseEquipment: document.getElementById("exerciseEquipment"),
     setupSection: document.getElementById("setupSection"),
     setupText: document.getElementById("setupText"),
     instructionsSection: document.getElementById("instructionsSection"),
