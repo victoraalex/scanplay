@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f4f6ee">
+    <title>ScanPlay</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <main class="menu-view" id="menuView" aria-labelledby="appTitle">
+        <div class="menu-shell">
+          <header class="menu-header">
+            <p class="brand">ScanPlay</p>
+            <h1 id="appTitle">Escaneo visual</h1>
+          </header>
+
+          <section class="control-section" aria-labelledby="colorsTitle">
+            <div class="section-line">
+              <h2 id="colorsTitle">Colores</h2>
+              <span class="selection-count" id="colorCount" aria-live="polite"></span>
+            </div>
+            <div class="color-grid" id="colorOptions"></div>
+          </section>
+
+          <section class="control-section" aria-labelledby="secondsTitle">
+            <h2 id="secondsTitle">Segundos</h2>
+            <div class="option-grid" id="intervalOptions"></div>
+          </section>
+
+          <section class="control-section" aria-labelledby="timeTitle">
+            <h2 id="timeTitle">Tiempo</h2>
+            <div class="option-grid" id="durationOptions"></div>
+          </section>
+
+          <p class="validation-message" id="validationMessage" role="status" aria-live="polite"></p>
+
+          <button class="play-button" id="playButton" type="button">▶ PLAY</button>
+        </div>
+      </main>
+
+      <section class="training-view" id="trainingView" aria-label="Entrenamiento" hidden>
+        <button class="back-button" id="backButton" type="button">← Volver</button>
+      </section>
+    </div>
+  </body>
+</html>
