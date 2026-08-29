@@ -1,0 +1,11 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local scratch files
+tmp/
+.tmp/
+
+# Logs
+*.log
