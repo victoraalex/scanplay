@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#f4f6ee">
+    <meta name="theme-color" content="#f6f7f9">
     <title>ScanPlay</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="app.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script defer src="assets/js/app.js"></script>
   </head>
   <body>
     <div class="app">
@@ -17,12 +17,34 @@
             <h1 id="appTitle">Escaneo visual</h1>
           </header>
 
-          <section class="control-section" aria-labelledby="colorsTitle">
+          <section class="control-section" aria-labelledby="modeTitle">
+            <h2 id="modeTitle">Estímulo</h2>
+            <div class="mode-switch" id="modeOptions" role="group" aria-label="Tipo de estímulo">
+              <button class="mode-button" type="button" data-mode="color">Colores</button>
+              <button class="mode-button" type="button" data-mode="number">Números</button>
+            </div>
+          </section>
+
+          <section class="control-section" id="colorSection" aria-labelledby="colorsTitle">
             <div class="section-line">
               <h2 id="colorsTitle">Colores</h2>
               <span class="selection-count" id="colorCount" aria-live="polite"></span>
             </div>
             <div class="color-grid" id="colorOptions"></div>
+          </section>
+
+          <section class="control-section" id="numberSection" aria-labelledby="numbersTitle" hidden>
+            <h2 id="numbersTitle">Rango</h2>
+            <div class="number-range">
+              <label class="number-field">
+                <span>Desde</span>
+                <input id="numberFrom" type="number" inputmode="numeric" min="0" max="99" step="1" value="1">
+              </label>
+              <label class="number-field">
+                <span>Hasta</span>
+                <input id="numberTo" type="number" inputmode="numeric" min="0" max="99" step="1" value="10">
+              </label>
+            </div>
           </section>
 
           <section class="control-section" aria-labelledby="secondsTitle">
@@ -43,6 +65,7 @@
 
       <section class="training-view" id="trainingView" aria-label="Entrenamiento" hidden>
         <button class="back-button" id="backButton" type="button">← Volver</button>
+        <div class="number-stimulus" id="numberStimulus" aria-live="off" hidden></div>
       </section>
     </div>
   </body>

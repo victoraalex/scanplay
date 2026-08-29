@@ -1,5 +1,10 @@
 "use strict";
 
+const MODES = {
+  COLOR: "color",
+  NUMBER: "number",
+};
+
 const COLORS = [
   { id: "red", label: "Rojo", hex: "#e3322a", isLight: false },
   { id: "blue", label: "Azul", hex: "#1f5eff", isLight: false },
@@ -18,31 +23,38 @@ const DURATION_OPTIONS = [
   { label: "5min", value: 300 },
 ];
 
+const NUMBER_LIMITS = {
+  min: 0,
+  max: 99,
+};
+
 const state = {
+  mode: MODES.COLOR,
   selectedColorIds: COLORS.map((color) => color.id),
+  numberFrom: "1",
+  numberTo: "10",
   intervalSec: 3,
   totalDurationSec: 60,
   isTraining: false,
-  currentColorId: null,
-  sessionColorIds: [],
-  sessionEndsAt: 0,
+  session: null,
+  currentStimulus: null,
   changeTimerId: null,
   endTimerId: null,
 };
 
 let elements = null;
 
-function chooseNextColor(colorIds, previousColorId, random = Math.random) {
-  if (!Array.isArray(colorIds) || colorIds.length === 0) {
+function chooseNextValue(values, previousValue, random = Math.random) {
+  if (!Array.isArray(values) || values.length === 0) {
     return null;
   }
 
   const candidates =
-    colorIds.length > 1
-      ? colorIds.filter((colorId) => colorId !== previousColorId)
-      : colorIds.slice();
+    values.length > 1
+      ? values.filter((value) => value !== previousValue)
+      : values.slice();
 
-  const safeCandidates = candidates.length > 0 ? candidates : colorIds;
+  const safeCandidates = candidates.length > 0 ? candidates : values;
   const index = Math.floor(random() * safeCandidates.length);
 
   return safeCandidates[Math.min(index, safeCandidates.length - 1)];
@@ -58,12 +70,92 @@ function getSelectedColorIds() {
   );
 }
 
+function parseIntegerInput(value) {
+  const trimmedValue = String(value).trim();
+
+  if (!/^-?\d+$/.test(trimmedValue)) {
+    return null;
+  }
+
+  const parsedValue = Number(trimmedValue);
+
+  return Number.isInteger(parsedValue) ? parsedValue : null;
+}
+
+function getNumberRange() {
+  const from = parseIntegerInput(state.numberFrom);
+  const to = parseIntegerInput(state.numberTo);
+
+  if (from === null || to === null) {
+    return { isValid: false, values: [], message: "Usa numeros enteros." };
+  }
+
+  if (
+    from < NUMBER_LIMITS.min ||
+    from > NUMBER_LIMITS.max ||
+    to < NUMBER_LIMITS.min ||
+    to > NUMBER_LIMITS.max
+  ) {
+    return { isValid: false, values: [], message: "El rango debe estar entre 0 y 99." };
+  }
+
+  if (from >= to) {
+    return { isValid: false, values: [], message: "Desde debe ser menor que Hasta." };
+  }
+
+  const values = [];
+
+  for (let value = from; value <= to; value += 1) {
+    values.push(value);
+  }
+
+  return { isValid: values.length >= 2, values, message: "" };
+}
+
+function getMenuValidation() {
+  if (state.mode === MODES.COLOR) {
+    const colorIds = getSelectedColorIds();
+
+    return {
+      isValid: colorIds.length >= 2,
+      message: colorIds.length >= 2 ? "" : "Selecciona al menos 2 colores.",
+    };
+  }
+
+  const range = getNumberRange();
+
+  return {
+    isValid: range.isValid,
+    message: range.message,
+  };
+}
+
+function getSessionConfig() {
+  if (state.mode === MODES.COLOR) {
+    return {
+      mode: MODES.COLOR,
+      values: getSelectedColorIds(),
+      intervalMs: state.intervalSec * 1000,
+      totalDurationMs: state.totalDurationSec * 1000,
+    };
+  }
+
+  return {
+    mode: MODES.NUMBER,
+    values: getNumberRange().values,
+    intervalMs: state.intervalSec * 1000,
+    totalDurationMs: state.totalDurationSec * 1000,
+  };
+}
+
 function createButton(className, text, onClick) {
   const button = document.createElement("button");
+
   button.className = className;
   button.type = "button";
   button.textContent = text;
   button.addEventListener("click", onClick);
+
   return button;
 }
 
@@ -112,6 +204,15 @@ function renderOptionButtons() {
   });
 }
 
+function setMode(mode) {
+  if (state.isTraining || state.mode === mode) {
+    return;
+  }
+
+  state.mode = mode;
+  updateMenu();
+}
+
 function toggleColor(colorId) {
   if (state.isTraining) {
     return;
@@ -126,15 +227,24 @@ function toggleColor(colorId) {
   updateMenu();
 }
 
-function updateMenu() {
+function updateModeControls() {
+  elements.modeOptions.querySelectorAll(".mode-button").forEach((button) => {
+    const isSelected = button.dataset.mode === state.mode;
+
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-pressed", String(isSelected));
+  });
+
+  const isColorMode = state.mode === MODES.COLOR;
+
+  elements.colorSection.hidden = !isColorMode;
+  elements.numberSection.hidden = isColorMode;
+}
+
+function updateColorControls() {
   const selectedColorIds = getSelectedColorIds();
-  const canPlay = selectedColorIds.length >= 2;
 
   elements.colorCount.textContent = `${selectedColorIds.length}/6`;
-  elements.validationMessage.textContent = canPlay
-    ? ""
-    : "Selecciona al menos 2 colores.";
-  elements.playButton.disabled = !canPlay;
 
   elements.colorOptions.querySelectorAll(".color-card").forEach((button) => {
     const isSelected = state.selectedColorIds.includes(button.dataset.colorId);
@@ -146,7 +256,9 @@ function updateMenu() {
       `${button.textContent}, ${isSelected ? "activo" : "inactivo"}`
     );
   });
+}
 
+function updateOptionControls() {
   elements.intervalOptions.querySelectorAll(".option-button").forEach((button) => {
     const isSelected = Number(button.dataset.interval) === state.intervalSec;
 
@@ -160,6 +272,19 @@ function updateMenu() {
     button.classList.toggle("is-selected", isSelected);
     button.setAttribute("aria-pressed", String(isSelected));
   });
+}
+
+function updateMenu() {
+  const validation = getMenuValidation();
+
+  updateModeControls();
+  updateColorControls();
+  updateOptionControls();
+
+  elements.numberFrom.value = state.numberFrom;
+  elements.numberTo.value = state.numberTo;
+  elements.validationMessage.textContent = validation.message;
+  elements.playButton.disabled = !validation.isValid;
 }
 
 function clearSessionTimers() {
@@ -185,16 +310,28 @@ function showMenuView() {
   elements.menuView.hidden = false;
   elements.trainingView.style.backgroundColor = "";
   elements.trainingView.style.removeProperty("--training-color");
+  elements.numberStimulus.hidden = true;
+  elements.numberStimulus.textContent = "";
   document.body.classList.remove("training-active");
 }
 
-function applyTrainingColor(colorId) {
+function generateNextStimulus() {
+  if (!state.session) {
+    return null;
+  }
+
+  return chooseNextValue(state.session.values, state.currentStimulus);
+}
+
+function renderColorStimulus(colorId) {
   const color = getColor(colorId);
 
   if (!color) {
     return;
   }
 
+  elements.numberStimulus.hidden = true;
+  elements.numberStimulus.textContent = "";
   elements.trainingView.style.setProperty("--training-color", color.hex);
   elements.trainingView.style.backgroundColor = color.hex;
   elements.trainingView.style.setProperty(
@@ -207,27 +344,48 @@ function applyTrainingColor(colorId) {
   );
 }
 
-function showNextColor() {
-  if (!state.isTraining) {
-    return;
-  }
-
-  const nextColorId = chooseNextColor(state.sessionColorIds, state.currentColorId);
-
-  state.currentColorId = nextColorId;
-  applyTrainingColor(nextColorId);
-  scheduleNextColorChange();
+function renderNumberStimulus(number) {
+  elements.trainingView.style.setProperty("--training-color", "#050505");
+  elements.trainingView.style.backgroundColor = "#050505";
+  elements.trainingView.style.setProperty("--training-control-bg", "rgba(255, 255, 255, 0.12)");
+  elements.trainingView.style.setProperty("--training-control-fg", "#ffffff");
+  elements.numberStimulus.textContent = String(number);
+  elements.numberStimulus.hidden = false;
 }
 
-function scheduleNextColorChange() {
+function renderStimulus(stimulus) {
+  if (!state.session) {
+    return;
+  }
+
+  if (state.session.mode === MODES.COLOR) {
+    renderColorStimulus(stimulus);
+    return;
+  }
+
+  renderNumberStimulus(stimulus);
+}
+
+function showNextStimulus() {
   if (!state.isTraining) {
     return;
   }
 
-  const intervalMs = state.intervalSec * 1000;
-  const remainingMs = state.sessionEndsAt - performance.now();
+  const stimulus = generateNextStimulus();
 
-  if (remainingMs <= intervalMs + 50) {
+  state.currentStimulus = stimulus;
+  renderStimulus(stimulus);
+  scheduleNextStimulusChange();
+}
+
+function scheduleNextStimulusChange() {
+  if (!state.isTraining || !state.session) {
+    return;
+  }
+
+  const remainingMs = state.session.endsAt - performance.now();
+
+  if (remainingMs <= state.session.intervalMs + 50) {
     return;
   }
 
@@ -238,40 +396,47 @@ function scheduleNextColorChange() {
       return;
     }
 
-    showNextColor();
-  }, intervalMs);
+    showNextStimulus();
+  }, state.session.intervalMs);
 }
 
 function startTraining() {
-  const colorIds = getSelectedColorIds();
+  const validation = getMenuValidation();
 
-  if (colorIds.length < 2) {
+  if (!validation.isValid) {
     updateMenu();
     return;
   }
 
+  const sessionConfig = getSessionConfig();
+
   clearSessionTimers();
 
   state.isTraining = true;
-  state.currentColorId = null;
-  state.sessionColorIds = colorIds.slice();
-  state.sessionEndsAt = performance.now() + state.totalDurationSec * 1000;
+  state.currentStimulus = null;
+  state.session = {
+    ...sessionConfig,
+    endsAt: performance.now() + sessionConfig.totalDurationMs,
+  };
 
   showTrainingView();
-  showNextColor();
+  showNextStimulus();
 
   state.endTimerId = window.setTimeout(() => {
+    if (!state.isTraining) {
+      return;
+    }
+
     stopTraining();
-  }, state.totalDurationSec * 1000);
+  }, sessionConfig.totalDurationMs);
 }
 
 function stopTraining() {
   clearSessionTimers();
 
   state.isTraining = false;
-  state.currentColorId = null;
-  state.sessionColorIds = [];
-  state.sessionEndsAt = 0;
+  state.session = null;
+  state.currentStimulus = null;
 
   showMenuView();
 }
@@ -280,17 +445,37 @@ function init() {
   elements = {
     menuView: document.getElementById("menuView"),
     trainingView: document.getElementById("trainingView"),
+    modeOptions: document.getElementById("modeOptions"),
+    colorSection: document.getElementById("colorSection"),
+    numberSection: document.getElementById("numberSection"),
     colorOptions: document.getElementById("colorOptions"),
     intervalOptions: document.getElementById("intervalOptions"),
     durationOptions: document.getElementById("durationOptions"),
     colorCount: document.getElementById("colorCount"),
+    numberFrom: document.getElementById("numberFrom"),
+    numberTo: document.getElementById("numberTo"),
     validationMessage: document.getElementById("validationMessage"),
     playButton: document.getElementById("playButton"),
     backButton: document.getElementById("backButton"),
+    numberStimulus: document.getElementById("numberStimulus"),
   };
 
   renderColorOptions();
   renderOptionButtons();
+
+  elements.modeOptions.querySelectorAll(".mode-button").forEach((button) => {
+    button.addEventListener("click", () => setMode(button.dataset.mode));
+  });
+
+  elements.numberFrom.addEventListener("input", (event) => {
+    state.numberFrom = event.target.value;
+    updateMenu();
+  });
+
+  elements.numberTo.addEventListener("input", (event) => {
+    state.numberTo = event.target.value;
+    updateMenu();
+  });
 
   elements.playButton.addEventListener("click", startTraining);
   elements.backButton.addEventListener("click", stopTraining);
