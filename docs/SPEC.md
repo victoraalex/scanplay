@@ -1,30 +1,31 @@
-# ScanPlay V1 minima - Especificacion funcional y tecnica
+# ScanPlay v1.1.0 - Especificacion funcional y tecnica
 
-Esta especificacion sustituye la V1 anterior.
+## Objetivo
 
-## 1. Objetivo
+ScanPlay es una aplicacion web movil sencilla para entrenar el escaneo visual en futbol mediante estimulos visuales a pantalla casi completa.
 
-ScanPlay es una aplicacion web movil extremadamente sencilla para entrenar el escaneo visual en futbol.
+La version `v1.1.0` conserva el modo de colores de `v1.0.0` y agrega un modo de numeros. La prioridad sigue siendo validar la mecanica basica de entrenamiento sin framework, backend ni persistencia.
 
-La mecanica de la V1 es unica: el movil muestra un color a pantalla completa y cambia automaticamente a otro color seleccionado cada cierto numero fijo de segundos.
-
-La prioridad de esta version es validar si la mecanica basica de entrenamiento funciona en uso real, especialmente en iPhone.
-
-## 2. Alcance V1
+## Alcance
 
 ### Incluido
 
 - Menu de configuracion.
 - Pantalla de entrenamiento.
+- Selector de tipo de estimulo:
+  - colores;
+  - numeros.
 - Seleccion visual de colores activos.
+- Configuracion de rango de numeros.
 - Seleccion de intervalo fijo en segundos.
 - Seleccion de duracion total del entrenamiento.
 - Boton grande `▶ PLAY`.
-- Cambio automatico de color durante la sesion.
+- Cambio automatico de estimulo durante la sesion.
 - Boton discreto `← Volver` durante la sesion.
 - Cancelacion de timers al volver o finalizar.
 - Retorno automatico al menu cuando termina el tiempo total.
 - Diseno mobile-first optimizado para iPhone.
+- Estructura profesional de repositorio.
 
 ### No incluido
 
@@ -32,41 +33,50 @@ La prioridad de esta version es validar si la mecanica basica de entrenamiento f
 - Backend.
 - Base de datos.
 - `localStorage`.
-- PWA.
+- PWA/offline.
 - Manifest.
 - Service worker.
 - Wake Lock.
 - Presets.
 - Estadisticas.
-- Numeros.
 - Sonidos.
 - Vibracion.
 - Camara.
 - Intervalos aleatorios.
 - Cuenta atras.
 - Cuentas de usuario.
-- Modos adicionales.
-- Tiempo restante visible durante la sesion.
-- Controles de pausa, reanudar, finalizar o reiniciar.
+- Estimulos combinados.
+- Modos especificos de futbol.
 
-## 3. Vistas
+## Vistas
 
 Solo existen dos vistas:
 
 1. `menu`: configuracion de la sesion.
-2. `training`: pantalla de entrenamiento a color completo.
+2. `training`: pantalla de entrenamiento.
 
 No hay vista de finalizacion. Cuando termina la sesion, la app vuelve automaticamente al menu.
 
-## 4. Menu
+## Menu
 
 El menu debe ser limpio, visual, moderno y rapido de usar durante un entrenamiento.
 
-Debe evitar el aspecto de formulario web tradicional. Los controles principales deben ser botones grandes, tarjetas o circulos.
+### Tipo de estimulo
 
-### 4.1 Colores
+El usuario puede elegir un unico modo activo:
 
-Colores iniciales:
+- `COLORES`;
+- `NUMEROS`.
+
+Al cambiar de modo durante la configuracion:
+
+- se oculta la configuracion del modo inactivo;
+- se mantiene la configuracion previamente elegida en el otro modo;
+- no se inicia ni se modifica una sesion activa.
+
+### Modo colores
+
+Colores disponibles:
 
 - rojo;
 - azul;
@@ -77,20 +87,62 @@ Colores iniciales:
 
 Cada color puede activarse o desactivarse.
 
-La seleccion debe ser visual, usando superficies del propio color.
-
 Regla:
 
 - debe haber al menos 2 colores seleccionados para poder iniciar.
 
-Si hay menos de 2 colores seleccionados:
+Durante la sesion:
 
-- el boton `▶ PLAY` queda desactivado;
-- se muestra un mensaje breve en el menu.
+- toda la pantalla adopta el color actual;
+- el color se selecciona aleatoriamente;
+- no se repite el mismo color dos veces consecutivas cuando hay alternativas.
 
-### 4.2 Segundos
+### Modo numeros
 
-Configura cada cuantos segundos cambia el color.
+El usuario configura un rango inclusivo:
+
+```text
+Desde: [numero]
+Hasta: [numero]
+```
+
+Valores iniciales:
+
+- Desde: `1`;
+- Hasta: `10`.
+
+Valores permitidos:
+
+- enteros entre `0` y `99`.
+
+Validaciones:
+
+- ambos valores deben ser enteros;
+- ambos valores deben estar entre `0` y `99`;
+- `Desde` debe ser menor que `Hasta`;
+- deben existir al menos dos numeros posibles.
+
+Ejemplo:
+
+```text
+Desde 3
+Hasta 7
+
+Estimulos posibles: 3, 4, 5, 6, 7
+```
+
+Si la configuracion es invalida, `▶ PLAY` queda desactivado.
+
+Durante la sesion:
+
+- el fondo es negro o casi negro;
+- aparece un unico numero centrado;
+- el numero es blanco, grande y legible a distancia;
+- no se repite el mismo numero dos veces consecutivas cuando hay alternativas.
+
+### Segundos
+
+Configura cada cuantos segundos cambia el estimulo.
 
 Opciones:
 
@@ -102,7 +154,7 @@ Opciones:
 
 El intervalo es fijo durante toda la sesion.
 
-### 4.3 Tiempo
+### Tiempo
 
 Configura la duracion total del entrenamiento.
 
@@ -114,9 +166,9 @@ Opciones:
 - 3 minutos;
 - 5 minutos.
 
-### 4.4 Play
+### Play
 
-En la parte inferior del menu debe existir un boton grande y claramente visible:
+El menu contiene un boton grande:
 
 ```text
 ▶ PLAY
@@ -124,27 +176,25 @@ En la parte inferior del menu debe existir un boton grande y claramente visible:
 
 Al pulsarlo:
 
-- valida que existan al menos 2 colores activos;
+- valida la configuracion del modo activo;
+- crea un snapshot simple de sesion;
 - inicia la sesion inmediatamente;
 - no muestra cuenta atras.
 
-## 5. Pantalla de entrenamiento
+## Pantalla de entrenamiento
 
-Durante el entrenamiento:
-
-- toda la pantalla adopta el color actual;
-- el color ocupa practicamente todo el viewport;
-- no hay numeros;
-- no hay texto central;
-- no hay estadisticas;
-- no hay tiempo restante;
-- no hay controles innecesarios.
-
-Solo debe existir un boton discreto:
+Durante el entrenamiento solo debe existir un boton discreto:
 
 ```text
 ← Volver
 ```
+
+Comportamiento:
+
+- en modo colores, la pantalla completa muestra el color actual;
+- en modo numeros, la pantalla completa usa fondo negro y un numero blanco centrado;
+- no se muestran estadisticas ni tiempo restante;
+- no se muestran controles de pausa, reanudar, finalizar o reiniciar.
 
 Al pulsar `← Volver`:
 
@@ -158,137 +208,98 @@ Cuando termina el tiempo total:
 2. se finaliza la sesion;
 3. se vuelve automaticamente al menu.
 
-## 6. Reglas de cambio de color
+## Arquitectura
 
-La sesion muestra un color inmediatamente al empezar.
+La V1.1 mantiene una arquitectura sencilla en JavaScript vanilla.
 
-Cada X segundos, segun la configuracion, cambia a otro color seleccionado aleatoriamente.
+Separaciones conceptuales:
 
-Si hay varios colores disponibles, no se puede mostrar el mismo color dos veces consecutivas.
+- configuracion de sesion;
+- validacion del menu;
+- generacion del siguiente estimulo;
+- renderizado del estimulo;
+- timers de sesion;
+- navegacion entre menu y entrenamiento.
 
-Ejemplos validos:
-
-```text
-ROJO -> AZUL -> ROJO -> VERDE
-```
-
-Ejemplo invalido:
-
-```text
-ROJO -> ROJO
-```
-
-Como el menu exige al menos 2 colores seleccionados, la sesion siempre debe tener alternativa para evitar repeticion consecutiva.
-
-## 7. Tecnologia
-
-La V1 usa exclusivamente:
-
-- HTML;
-- CSS;
-- JavaScript vanilla.
-
-No hay proceso de build.
-
-No hay dependencias externas.
-
-No hay almacenamiento persistente.
-
-## 8. Archivos
-
-La V1 debe contener solo estos archivos de aplicacion y documentacion:
-
-```text
-scanplay/
-  index.html
-  styles.css
-  app.js
-  SPEC.md
-  TASKS.md
-```
-
-## 9. Modelo simple
-
-### Color
-
-```text
-Color
-  id
-  label
-  hex
-  isLight
-```
-
-### Estado de aplicacion
-
-```text
-AppState
-  view
-  selectedColorIds[]
-  intervalSec
-  totalDurationSec
-  isTraining
-  currentColorId
-  changeTimerId
-  endTimerId
-```
-
-### Configuracion de sesion
-
-La configuracion se lee desde el estado del menu al pulsar `▶ PLAY`:
+El motor de sesion usa una configuracion generica:
 
 ```text
 SessionConfig
-  colorIds[]
+  mode
+  values[]
   intervalMs
   totalDurationMs
 ```
 
-La sesion no modifica la configuracion del menu mientras esta activa.
+El generador de estimulos recibe una lista de valores y el valor anterior. Si existen alternativas, excluye el valor anterior antes de elegir aleatoriamente.
 
-## 10. Gestion de timers
+Este modelo permite agregar otros tipos de estimulo mas adelante sin duplicar toda la logica de timers.
 
-La V1 necesita dos timers:
+## Gestion de timers
 
-- `changeTimerId`: programa el siguiente cambio de color.
+La sesion usa dos timers:
+
+- `changeTimerId`: programa el siguiente cambio de estimulo.
 - `endTimerId`: termina la sesion al cumplirse la duracion total.
 
 Reglas:
 
-- Al iniciar sesion, primero se cancelan timers previos por seguridad.
-- Al iniciar sesion, se muestra el primer color inmediatamente.
-- Despues de mostrar un color, se programa el siguiente cambio con `setTimeout`.
-- Antes de programar un nuevo cambio, se comprueba si queda tiempo suficiente.
-- Al pulsar `← Volver`, se cancelan ambos timers.
-- Al terminar automaticamente, se cancelan ambos timers.
-- Al volver al menu, `currentColorId` queda limpio.
-- Todo callback de timer debe comprobar que la sesion sigue activa antes de actuar.
+- al iniciar sesion, primero se cancelan timers previos;
+- el primer estimulo se muestra inmediatamente;
+- cada callback comprueba que la sesion siga activa;
+- `← Volver` cancela timers y limpia el estado de entrenamiento;
+- el fin automatico cancela timers y limpia el estado de entrenamiento;
+- al volver al menu no queda estimulo activo.
 
-## 11. Responsive/iPhone
+## Tecnologia
 
-El diseno debe:
+- HTML.
+- CSS.
+- JavaScript vanilla.
+- Sin dependencias externas.
+- Sin build step.
+- GitHub Pages sirve `index.html` desde la raiz.
 
-- ser mobile-first;
-- funcionar bien en anchuras tipo iPhone;
-- usar controles tactiles grandes;
-- respetar las safe areas con `env(safe-area-inset-*)`;
-- evitar que el boton `← Volver` quede debajo de zonas del sistema;
-- usar alturas de viewport estables con `100dvh` y fallback;
-- evitar scroll accidental durante la sesion;
-- permitir que el color domine casi toda la pantalla.
+## Estructura
 
-## 12. Criterios de aceptacion
+```text
+scanplay/
+  .github/
+    ISSUE_TEMPLATE/
+      bug_report.md
+      feature_request.md
+  assets/
+    css/
+      styles.css
+    js/
+      app.js
+  docs/
+    SPEC.md
+    ROADMAP.md
+    TASKS.md
+  index.html
+  README.md
+  CHANGELOG.md
+  .gitignore
+```
 
+## Criterios de aceptacion
+
+- GitHub Pages puede servir la app desde `index.html` en la raiz.
 - Solo existen dos vistas: menu y entrenamiento.
-- El menu permite activar/desactivar rojo, azul, verde, amarillo, blanco y naranja.
-- El menu permite elegir 1, 2, 3, 4 o 5 segundos.
-- El menu permite elegir 30 segundos, 1 minuto, 2 minutos, 3 minutos o 5 minutos.
-- `▶ PLAY` esta desactivado si hay menos de 2 colores activos.
-- Al pulsar `▶ PLAY`, la pantalla pasa inmediatamente al primer color.
-- El color cambia cada X segundos.
-- Nunca aparece el mismo color dos veces consecutivas.
-- Durante la sesion no se muestran numeros, texto central, estadisticas ni tiempo restante.
-- Durante la sesion solo aparece `← Volver`.
+- El selector de modo permite `COLORES` o `NUMEROS`, solo uno activo.
+- Cambiar de modo mantiene la configuracion del modo inactivo.
+- El modo colores conserva el comportamiento de `v1.0.0`.
+- En modo colores, `▶ PLAY` queda desactivado si hay menos de 2 colores activos.
+- En modo colores, no se repite color consecutivo cuando hay alternativas.
+- En modo numeros, el rango inicial es `1` a `10`.
+- En modo numeros, solo se aceptan enteros entre `0` y `99`.
+- En modo numeros, `Desde` debe ser menor que `Hasta`.
+- En modo numeros, `▶ PLAY` queda desactivado si el rango es invalido.
+- En modo numeros, los estimulos respetan el rango inclusivo.
+- En modo numeros, no se repite numero consecutivo cuando hay alternativas.
+- La duracion total se comparte entre ambos modos.
 - `← Volver` cancela timers y regresa al menu.
-- Al terminar la duracion total, la app cancela timers y vuelve al menu.
-- La app funciona abriendo `index.html` en un navegador moderno.
+- El fin automatico cancela timers y regresa al menu.
+- No hay errores JavaScript conocidos.
+- La UI funciona correctamente en viewport movil `390x844`.

@@ -1,53 +1,74 @@
-# ScanPlay V1 minima - Tareas
+# ScanPlay v1.1.0 - Tareas
 
-Estado actual: V1 minima implementada como prueba de colores a pantalla completa.
+## Versionado y workflow
 
-## Fase 1 - Documentacion
+- [x] Inspeccionar completamente el proyecto existente antes de modificar.
+- [x] Crear y trabajar en la rama `feature/number-mode`.
+- [x] No modificar directamente `main`.
+- [x] No hacer merge a `main`.
+- [x] No crear tag final.
 
-- [x] Reemplazar `SPEC.md` con la V1 minima.
-- [x] Eliminar de la V1 PWA, localStorage, Wake Lock, presets, numeros, estadisticas, cuenta atras e intervalos aleatorios.
-- [x] Definir los unicos archivos de la V1: `index.html`, `styles.css`, `app.js`, `SPEC.md`, `TASKS.md`.
+## Profesionalizacion del repositorio
 
-## Fase 2 - Estructura HTML
+- [x] Crear `.github/ISSUE_TEMPLATE/bug_report.md`.
+- [x] Crear `.github/ISSUE_TEMPLATE/feature_request.md`.
+- [x] Mover `styles.css` a `assets/css/styles.css`.
+- [x] Mover `app.js` a `assets/js/app.js`.
+- [x] Mover `SPEC.md` a `docs/SPEC.md`.
+- [x] Mover `TASKS.md` a `docs/TASKS.md`.
+- [x] Actualizar rutas en `index.html`.
+- [x] Crear `.gitignore`.
+- [x] No anadir `LICENSE`.
 
-- [x] Crear `index.html`.
-- [x] Crear solo dos vistas: menu y entrenamiento.
-- [x] Anadir selector visual de colores.
-- [x] Anadir selector de segundos.
-- [x] Anadir selector de tiempo total.
-- [x] Anadir boton grande `▶ PLAY`.
-- [x] Anadir boton discreto `← Volver` en entrenamiento.
+## Documentacion
 
-## Fase 3 - Estilos mobile-first
+- [x] Crear `README.md`.
+- [x] Crear `CHANGELOG.md`.
+- [x] Crear `docs/ROADMAP.md`.
+- [x] Actualizar `docs/SPEC.md` para `v1.1.0`.
+- [x] Actualizar `docs/TASKS.md` para `v1.1.0`.
 
-- [x] Crear `styles.css`.
-- [x] Disenar menu limpio, visual y tactil.
-- [x] Evitar aspecto de formulario tradicional.
-- [x] Optimizar layout para iPhone.
-- [x] Respetar safe areas.
-- [x] Hacer que la pantalla de entrenamiento sea color a pantalla completa.
-- [x] Evitar scroll accidental durante entrenamiento.
+## Modo colores
 
-## Fase 4 - Logica JavaScript
+- [x] Mantener seleccion visual de colores.
+- [x] Mantener minimo de 2 colores para iniciar.
+- [x] Mantener pantalla completa con color actual.
+- [x] Mantener seleccion aleatoria de color.
+- [x] Evitar repetir color consecutivo cuando hay alternativas.
 
-- [x] Crear `app.js`.
-- [x] Definir catalogo de colores.
-- [x] Gestionar activacion/desactivacion de colores.
-- [x] Exigir minimo 2 colores para iniciar.
-- [x] Gestionar seleccion de intervalo fijo.
-- [x] Gestionar seleccion de tiempo total.
-- [x] Iniciar sesion sin cuenta atras.
-- [x] Mostrar primer color inmediatamente.
-- [x] Cambiar color cada X segundos.
-- [x] Evitar repeticion consecutiva de color.
-- [x] Cancelar timers con `← Volver`.
-- [x] Cancelar timers al terminar por tiempo.
-- [x] Volver automaticamente al menu al finalizar.
+## Modo numeros
 
-## Fase 5 - Verificacion
+- [x] Anadir selector `COLORES | NUMEROS`.
+- [x] Permitir solo un modo activo.
+- [x] Mantener configuracion del modo inactivo al cambiar de modo.
+- [x] Ocultar colores y mostrar rango en modo numeros.
+- [x] Definir rango inicial `1` a `10`.
+- [x] Validar enteros entre `0` y `99`.
+- [x] Validar `Desde` menor que `Hasta`.
+- [x] Desactivar `▶ PLAY` con rango invalido.
+- [x] Mostrar fondo negro y numero blanco centrado durante entrenamiento.
+- [x] Evitar repetir numero consecutivo cuando hay alternativas.
 
-- [x] Revisar sintaxis JavaScript.
-- [x] Comprobar gestion de timers.
-- [x] Comprobar que no se repiten colores consecutivos cuando hay alternativas.
-- [x] Comprobar comportamiento responsive movil.
-- [x] Confirmar que no se han anadido funcionalidades fuera de especificacion.
+## Arquitectura
+
+- [x] Separar conceptualmente configuracion de sesion.
+- [x] Separar generacion del siguiente estimulo.
+- [x] Separar renderizado de estimulo.
+- [x] Compartir timers entre colores y numeros.
+- [x] Mantener navegacion menu/entrenamiento sencilla.
+- [x] Evitar dependencias, frameworks, npm y backend.
+
+## Validacion
+
+- [x] Verificar que el modo colores sigue funcionando.
+- [x] Verificar que el modo numeros funciona.
+- [x] Verificar que los numeros respetan min/max.
+- [x] Verificar que no se repiten numeros consecutivos si hay alternativas.
+- [x] Verificar que no se repiten colores consecutivos si hay alternativas.
+- [x] Verificar que cambiar de modo no rompe la configuracion.
+- [x] Verificar que `▶ PLAY` se desactiva con configuracion invalida.
+- [x] Verificar que `← Volver` cancela timers.
+- [x] Verificar que el fin automatico cancela timers.
+- [x] Verificar que no existen errores JavaScript conocidos.
+- [x] Verificar viewport movil `390x844`.
+- [x] Verificar que GitHub Pages puede servir `index.html` desde root.
