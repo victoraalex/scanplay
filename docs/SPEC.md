@@ -33,6 +33,8 @@ No hay biblioteca de ejercicios, categorias de drills ni modos avanzados. La pri
 - Tiempo total configurable.
 - Cancelacion segura de timers al volver o finalizar.
 - Diseno mobile-first optimizado para iPhone.
+- Instalacion como PWA desde Safari.
+- Cache offline del shell de la aplicacion tras la primera carga online.
 
 ## No incluido
 
@@ -49,8 +51,6 @@ No hay biblioteca de ejercicios, categorias de drills ni modos avanzados. La pri
 - Backend.
 - Base de datos.
 - `localStorage`.
-- PWA/offline.
-- Service worker.
 - Wake Lock.
 - Presets.
 - Estadisticas.
@@ -218,6 +218,26 @@ Reglas:
 - si el token ya no coincide, el callback no hace nada;
 - ningun estimulo de una sesion anterior debe aparecer despues de volver.
 
+## PWA y offline
+
+La app incluye:
+
+- `manifest.webmanifest` en la raiz;
+- iconos PNG para instalacion en pantalla de inicio;
+- `service-worker.js` en la raiz;
+- registro del service worker desde `assets/js/app.js`.
+
+El service worker cachea el shell estatico de la aplicacion:
+
+- `./`;
+- `index.html`;
+- `manifest.webmanifest`;
+- `assets/css/styles.css`;
+- `assets/js/app.js`;
+- iconos de `assets/icons/`.
+
+El registro no se intenta desde `file://` para evitar errores al abrir el HTML directamente. Para probar PWA/offline se debe usar GitHub Pages o `localhost`.
+
 ## Tecnologia
 
 - HTML.
@@ -227,6 +247,7 @@ Reglas:
 - Sin dependencias.
 - Sin npm.
 - Sin backend.
+- PWA mediante manifest y service worker.
 - GitHub Pages sirve `index.html` desde la raiz del repositorio.
 
 ## Responsive y accesibilidad movil
@@ -250,6 +271,11 @@ scanplay/
   assets/
     css/
       styles.css
+    icons/
+      icon-180.png
+      icon-192.png
+      icon-512.png
+      maskable-512.png
     js/
       app.js
   docs/
@@ -259,5 +285,7 @@ scanplay/
   index.html
   README.md
   CHANGELOG.md
+  manifest.webmanifest
+  service-worker.js
   .gitignore
 ```

@@ -20,6 +20,8 @@ Mostrar estimulos visuales simples mientras el jugador trabaja con balon, para e
 - Pantalla de entrenamiento a pantalla completa.
 - Evita repetir consecutivamente el mismo estimulo cuando hay alternativas.
 - Control discreto `← Volver` durante el entrenamiento.
+- Instalacion como PWA desde Safari.
+- Funcionamiento offline despues de la primera carga.
 
 ## Modos
 
@@ -36,6 +38,18 @@ python3 -m http.server 8000
 ```
 
 Despues abre [http://localhost:8000](http://localhost:8000).
+
+Para probar la PWA y el modo offline, usa `localhost` o la URL publicada con HTTPS. Los service workers no se registran desde `file://`.
+
+## Instalacion en iPhone
+
+1. Abre [https://victoraalex.github.io/scanplay/](https://victoraalex.github.io/scanplay/) en Safari.
+2. Toca Compartir.
+3. Toca `Anadir a pantalla de inicio`.
+4. Manten activado `Open as Web App` si iOS lo muestra.
+5. Toca `Anadir`.
+
+Tras abrirla una vez con conexion, la app queda cacheada para uso offline.
 
 ## Stack tecnologico
 
@@ -57,6 +71,11 @@ scanplay/
   assets/
     css/
       styles.css
+    icons/
+      icon-180.png
+      icon-192.png
+      icon-512.png
+      maskable-512.png
     js/
       app.js
   docs/
@@ -66,6 +85,8 @@ scanplay/
   index.html
   README.md
   CHANGELOG.md
+  manifest.webmanifest
+  service-worker.js
   .gitignore
 ```
 
@@ -73,8 +94,8 @@ scanplay/
 
 - Completado: `v1.0.0` con estimulos de colores.
 - Completado: `v1.1.0` con modo numeros y estructura profesional del repositorio.
-- Actual: enfoque minimalista con tres modos base.
-- Ideas futuras: PWA/offline, guardar configuracion, intervalos variables, presets y estadisticas.
+- Actual: enfoque minimalista con tres modos base y soporte PWA/offline.
+- Ideas futuras: guardar configuracion, intervalos variables, presets y estadisticas.
 
 ## Version
 

@@ -43,6 +43,16 @@
 - [x] Mantener pantalla de entrenamiento dominada por el estimulo.
 - [x] Revisar viewport movil `390x844`.
 
+## PWA/offline
+
+- [x] Crear `manifest.webmanifest`.
+- [x] Crear iconos para pantalla de inicio.
+- [x] Crear `service-worker.js`.
+- [x] Cachear el shell estatico de la aplicacion.
+- [x] Registrar el service worker desde JavaScript.
+- [x] Evitar el registro del service worker desde `file://`.
+- [x] Documentar instalacion en iPhone.
+
 ## Documentacion
 
 - [x] Actualizar `README.md`.
@@ -55,3 +65,5 @@
 
 - [ ] Probar manualmente en iPhone real.
 - [ ] Revisar legibilidad con el telefono colocado a distancia de entrenamiento.
+- [ ] Probar instalacion desde Safari.
+- [ ] Probar apertura offline desde el icono instalado.

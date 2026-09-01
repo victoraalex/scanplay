@@ -733,6 +733,18 @@ function init() {
   elements.backToHomeButton.addEventListener("click", () => showHome());
   elements.startButton.addEventListener("click", startSession);
   elements.backButton.addEventListener("click", () => stopSession("config"));
+  registerServiceWorker();
+}
+
+function registerServiceWorker() {
+  if (
+    !("serviceWorker" in navigator) ||
+    window.location.protocol === "file:"
+  ) {
+    return;
+  }
+
+  navigator.serviceWorker.register("./service-worker.js").catch(() => {});
 }
 
 if (typeof document !== "undefined") {

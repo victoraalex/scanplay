@@ -27,12 +27,14 @@
 - Modo Direcciones.
 - Interfaz movil mas sobria y profesional.
 - Motor cronometrado compartido para los tres modos.
+- Instalacion como PWA desde Safari.
+- Funcionamiento offline despues de la primera carga.
 
 ## Future ideas
 
-- PWA/offline.
 - Guardar configuraciones.
 - Intervalos variables.
+- Mejoras PWA adicionales.
 - Flechas direccionales avanzadas.
 - Comandos de accion.
 - Brief stimulus / Flash Scan.

@@ -9,6 +9,9 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/), and t
 ### Added
 
 - Direction stimulus mode.
+- PWA manifest.
+- App icons for Home Screen installation.
+- Service worker cache for offline use after the first online load.
 
 ### Changed
 
