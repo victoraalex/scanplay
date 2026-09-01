@@ -1,36 +1,31 @@
 # ScanPlay
 
-ScanPlay es una aplicacion web mobile-first para complementar ejercicios individuales de tecnificacion de futbol.
-
-La aplicacion proporciona informacion visual mientras el jugador trabaja con balon, pared, conos, conduccion, controles o pases. La idea es entrenar el ciclo mirar, identificar, recordar cuando haga falta, decidir y ejecutar con balon.
+ScanPlay es una aplicacion web mobile-first para entrenar escaneo visual aplicado al futbol.
 
 Version publicada: [https://victoraalex.github.io/scanplay/](https://victoraalex.github.io/scanplay/)
 
 ## Objetivo
 
-Validar ejercicios simples de escaneo visual aplicados a tareas tecnicas reales, sin cuentas, backend, persistencia ni distribucion en tiendas de aplicaciones.
+Mostrar estimulos visuales simples mientras el jugador trabaja con balon, para entrenar mirar, identificar y ejecutar sin convertir la app en un juego cognitivo complejo.
 
 ## Funcionalidades actuales
 
-- Biblioteca de ejercicios como pantalla principal.
-- Configuracion especifica por ejercicio.
-- Estimulos por color o numero en ejercicios compatibles.
-- Rango numerico configurable.
-- Intervalos o ventanas de reto segun el ejercicio.
-- Ejercicio de conflicto palabra/color.
-- Ejercicio de memoria de secuencia.
+- Tres modos principales: colores, numeros y direcciones.
+- Configuracion especifica por modo.
+- Intervalo fijo configurable: `1s`, `2s`, `3s`, `4s`, `5s`.
+- Duracion total configurable: `30s`, `1min`, `2min`, `3min`, `5min`.
+- Seleccion visual de colores.
+- Rango numerico configurable de `0` a `99`.
+- Seleccion de direcciones.
+- Pantalla de entrenamiento a pantalla completa.
 - Evita repetir consecutivamente el mismo estimulo cuando hay alternativas.
-- Interfaz mobile-first pensada para uso rapido en pantallas tipo iPhone.
 - Control discreto `← Volver` durante el entrenamiento.
 
-## Exercise Library
+## Modos
 
-- Escaneo libre: identifica colores o numeros mientras trabajas con el balon.
-- Conos reactivos: asocia cada estimulo a un cono y conduce hacia el objetivo indicado.
-- Control orientado: escanea antes de recibir y orienta el primer control hacia el objetivo.
-- Pases por numero: memoriza el numero y completa esa cantidad de pases antes de volver a mirar.
-- Conflicto: resuelve el conflicto entre palabra y color mientras mantienes el control del balon.
-- Secuencia: memoriza estimulos y repite la secuencia fisicamente al terminar.
+- Colores: la pantalla completa cambia de color.
+- Numeros: muestra un numero grande sobre fondo oscuro.
+- Direcciones: muestra una flecha grande sobre fondo oscuro.
 
 ## Ejecucion local
 
@@ -78,13 +73,13 @@ scanplay/
 
 - Completado: `v1.0.0` con estimulos de colores.
 - Completado: `v1.1.0` con modo numeros y estructura profesional del repositorio.
-- Actual: `v1.2.0` con biblioteca de ejercicios.
-- Ideas futuras: flechas direccionales, comandos de accion, Flash Scan, intervalos aleatorios, PWA/offline, guardado de configuraciones, presets y estadisticas.
+- Actual: enfoque minimalista con tres modos base.
+- Ideas futuras: PWA/offline, guardar configuracion, intervalos variables, presets y estadisticas.
 
 ## Version
 
-Version actual: `v1.2.0` en progreso en `feature/exercise-library`.
+Version actual: `v1.2.0` en progreso.
 
 ## Estado del proyecto
 
-Prototipo temprano. La app se mantiene intencionadamente pequena para validar la interaccion principal de entrenamiento.
+Prototipo temprano. La app se mantiene intencionadamente pequena para validar la mecanica principal desde un movil.
