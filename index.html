@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#f6f7f9">
+    <meta name="theme-color" content="#0a0a0b">
     <title>ScanPlay</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <script defer src="assets/js/app.js"></script>
@@ -14,60 +14,39 @@
         <div class="screen-shell">
           <header class="home-header">
             <p class="brand">ScanPlay</p>
-            <h1 id="homeTitle">ScanPlay</h1>
-            <p class="tagline">Entrena para mirar antes de actuar.</p>
+            <h1 id="homeTitle">Entrena tu visión</h1>
+            <p class="tagline">Estímulos visuales para trabajar el escaneo con balón.</p>
           </header>
 
-          <section class="exercise-library" aria-label="Biblioteca de ejercicios">
-            <div class="exercise-grid" id="exerciseCards"></div>
+          <section class="mode-library" aria-label="Modos de entrenamiento">
+            <div class="mode-grid" id="modeCards"></div>
           </section>
         </div>
       </main>
 
-      <main class="config-view" id="configView" aria-labelledby="exerciseTitle" hidden>
+      <main class="config-view" id="configView" aria-labelledby="modeTitle" hidden>
         <div class="screen-shell config-shell">
-          <button class="nav-back" id="backToExercisesButton" type="button">← Ejercicios</button>
+          <button class="nav-back" id="backToHomeButton" type="button">← Volver</button>
 
-          <header class="exercise-header">
-            <p class="brand" id="exerciseKicker">Ejercicio</p>
-            <h1 id="exerciseTitle"></h1>
-            <p class="exercise-description" id="exerciseDescription"></p>
+          <header class="mode-header">
+            <p class="brand" id="modeKicker">Configuración</p>
+            <h1 id="modeTitle"></h1>
+            <p class="mode-description" id="modeDescription"></p>
           </header>
 
-          <section class="exercise-meta" id="exerciseMeta" aria-label="Objetivo y material">
-            <div class="meta-item">
-              <span class="meta-label">Objetivo</span>
-              <p id="exerciseObjective"></p>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Material</span>
-              <p id="exerciseEquipment"></p>
-            </div>
-          </section>
-
-          <section class="info-section" id="setupSection" aria-labelledby="setupTitle" hidden>
-            <h2 id="setupTitle">Cómo montarlo</h2>
-            <p id="setupText"></p>
-          </section>
-
-          <section class="info-section" id="instructionsSection" aria-labelledby="instructionsTitle" hidden>
-            <h2 id="instructionsTitle">Instrucciones</h2>
-            <p id="instructionsText"></p>
-          </section>
-
           <section class="control-section" aria-labelledby="configTitle">
-            <h2 id="configTitle">Configuración</h2>
+            <h2 id="configTitle">Ajustes</h2>
             <div class="config-controls" id="configControls"></div>
           </section>
 
           <p class="validation-message" id="validationMessage" role="status" aria-live="polite"></p>
 
-          <button class="play-button" id="startButton" type="button">▶ EMPEZAR</button>
+          <button class="play-button" id="startButton" type="button">INICIAR SESIÓN</button>
         </div>
       </main>
 
       <section class="training-view" id="trainingView" aria-label="Entrenamiento" hidden>
-        <button class="back-button" id="backButton" type="button">← Volver</button>
+        <button class="back-button" id="backButton" type="button">← Salir</button>
         <div class="stimulus-root" id="stimulusRoot" aria-live="off"></div>
       </section>
     </div>

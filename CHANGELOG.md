@@ -8,18 +8,22 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/), and t
 
 ### Added
 
-- Exercise library.
-- Exercise home screen.
+- Direction stimulus mode.
+
+### Changed
+
+- Product focus reduced to three primary modes: colors, numbers, and directions.
+- Mobile interface updated with a more minimal and professional visual style.
+- Session code now uses one shared timed random stimulus flow for the three modes.
+
+### Removed
+
+- Exercise library categories.
 - Reactive cone drill.
 - Oriented first-touch drill.
 - Number pass challenge.
 - Conflict/Stroop drill.
 - Sequence memory drill.
-
-### Changed
-
-- Navigation now uses Home, Exercise Configuration, and Training Session levels.
-- Session code separates exercise definitions from stimulus generation.
 
 ## [1.1.0]
 

@@ -21,23 +21,25 @@
 
 ### v1.2.0
 
-- Biblioteca de ejercicios.
-- Home como entrada principal.
-- Ejercicios de escaneo aplicados a balon, conos, control y pases.
-- Conflicto palabra/color.
-- Memoria de secuencia.
+- Reenfoque del producto hacia tres modos principales.
+- Modo Colores.
+- Modo Numeros.
+- Modo Direcciones.
+- Interfaz movil mas sobria y profesional.
+- Motor cronometrado compartido para los tres modos.
 
 ## Future ideas
 
-- Directional arrows.
-- Action commands.
-- Brief stimulus / Flash Scan.
-- Intervalos aleatorios.
 - PWA/offline.
 - Guardar configuraciones.
-- Estadisticas.
+- Intervalos variables.
+- Flechas direccionales avanzadas.
+- Comandos de accion.
+- Brief stimulus / Flash Scan.
 - Presets.
+- Estadisticas.
 - Sound/voice.
 - Camera/head tracking.
+- Ejercicios guiados especificos de futbol, solo si el uso real lo justifica.
 
 Estas ideas no estan implementadas todavia.

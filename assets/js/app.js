@@ -3,32 +3,34 @@
 const STIMULUS_TYPES = {
   COLOR: "color",
   NUMBER: "number",
+  DIRECTION: "direction",
 };
 
-const ENGINES = {
-  RANDOM: "random",
-  PASS_COUNT: "pass-count",
-  CONFLICT: "conflict",
-  SEQUENCE: "sequence",
-};
-
-const RESPONSE_RULES = {
-  INK: "ink",
-  WORD: "word",
+const MODE_IDS = {
+  COLORS: "colors",
+  NUMBERS: "numbers",
+  DIRECTIONS: "directions",
 };
 
 const COLORS = [
-  { id: "red", label: "Rojo", word: "ROJO", hex: "#e3322a", isLight: false },
-  { id: "blue", label: "Azul", word: "AZUL", hex: "#1f5eff", isLight: false },
-  { id: "green", label: "Verde", word: "VERDE", hex: "#14a85b", isLight: false },
-  { id: "yellow", label: "Amarillo", word: "AMARILLO", hex: "#f4d43d", isLight: true },
-  { id: "white", label: "Blanco", word: "BLANCO", hex: "#f8f7f1", isLight: true },
-  { id: "orange", label: "Naranja", word: "NARANJA", hex: "#f27a1f", isLight: false },
+  { id: "red", label: "Rojo", hex: "#ef2d2d", isLight: false },
+  { id: "blue", label: "Azul", hex: "#2463ff", isLight: false },
+  { id: "green", label: "Verde", hex: "#00d45a", isLight: false },
+  { id: "yellow", label: "Amarillo", hex: "#f5d925", isLight: true },
+  { id: "white", label: "Blanco", hex: "#f0efe8", isLight: true },
+  { id: "orange", label: "Naranja", hex: "#f57a18", isLight: false },
+];
+
+const DIRECTIONS = [
+  { id: "up", label: "Arriba", symbol: "↑" },
+  { id: "right", label: "Derecha", symbol: "→" },
+  { id: "down", label: "Abajo", symbol: "↓" },
+  { id: "left", label: "Izquierda", symbol: "←" },
 ];
 
 const COLOR_IDS = COLORS.map((color) => color.id);
-const CONFLICT_COLOR_IDS = ["red", "blue", "green", "yellow", "orange"];
-
+const DIRECTION_IDS = DIRECTIONS.map((direction) => direction.id);
+const NUMBER_LIMITS = { min: 0, max: 99 };
 const INTERVAL_OPTIONS = [1, 2, 3, 4, 5];
 const DURATION_OPTIONS = [
   { label: "30s", value: 30 },
@@ -37,50 +39,31 @@ const DURATION_OPTIONS = [
   { label: "3min", value: 180 },
   { label: "5min", value: 300 },
 ];
-const CHALLENGE_TIME_OPTIONS = [5, 7, 10, 15];
-const SEQUENCE_LENGTH_OPTIONS = [
-  { label: "3", value: 3 },
-  { label: "4", value: 4 },
-  { label: "5", value: 5 },
-  { label: "6", value: 6 },
-];
-const STIMULUS_SPEED_OPTIONS = [
-  { label: "1s", value: 1 },
-  { label: "1.5s", value: 1.5 },
-  { label: "2s", value: 2 },
-  { label: "3s", value: 3 },
-];
-const RECALL_TIME_OPTIONS = [5, 10, 15];
-const ROUND_OPTIONS = [
-  { label: "3", value: 3 },
-  { label: "5", value: 5 },
-  { label: "8", value: 8 },
-  { label: "10", value: 10 },
-];
-const NORMAL_NUMBER_LIMITS = { min: 0, max: 99 };
-const PASS_NUMBER_LIMITS = { min: 1, max: 10 };
-const SOLUTION_VISIBLE_MS = 3500;
 
-const EXERCISES = [
+const MODES = [
   {
-    id: "freeScan",
-    name: "Escaneo libre",
-    icon: "SCAN",
-    cardDescription: "Identifica colores o números mientras trabajas con el balón.",
-    description: "Identifica colores o números mientras trabajas con el balón.",
-    objective: "Hábito de escaneo",
-    equipment: ["Balón", "Pared o espacio de conducción"],
-    setup:
-      "Coloca el móvil detrás o a un lado para obligarte a apartar brevemente la mirada del balón.",
-    instructions:
-      "Automatiza el hábito de escanear, obtener información y volver a ejecutar con balón.",
-    engine: ENGINES.RANDOM,
-    stimulusModes: [STIMULUS_TYPES.COLOR, STIMULUS_TYPES.NUMBER],
+    id: MODE_IDS.COLORS,
+    name: "Colores",
+    icon: "COL",
+    cardDescription: "Identifica el color, reacciona y ejecuta.",
+    description: "La pantalla cambia de color. Levanta la cabeza, identifica y vuelve al balón.",
+    renderType: STIMULUS_TYPES.COLOR,
     colorIds: COLOR_IDS,
-    numberLimits: NORMAL_NUMBER_LIMITS,
     defaults: {
-      stimulusType: STIMULUS_TYPES.COLOR,
       selectedColorIds: COLOR_IDS,
+      intervalSec: 3,
+      totalDurationSec: 60,
+    },
+  },
+  {
+    id: MODE_IDS.NUMBERS,
+    name: "Números",
+    icon: "NUM",
+    cardDescription: "Memoriza el número y úsalo como consigna.",
+    description: "Cada número puede representar una zona, un pase o una acción técnica.",
+    renderType: STIMULUS_TYPES.NUMBER,
+    numberLimits: NUMBER_LIMITS,
+    defaults: {
       numberFrom: "1",
       numberTo: "10",
       intervalSec: 3,
@@ -88,128 +71,25 @@ const EXERCISES = [
     },
   },
   {
-    id: "reactiveCones",
-    name: "Conos reactivos",
-    icon: "CONO",
-    cardDescription: "Asocia cada estímulo a un cono y conduce hacia el objetivo indicado.",
-    description: "Asocia cada estímulo a un cono y conduce hacia el objetivo indicado.",
-    objective: "Escaneo + reacción espacial",
-    equipment: ["Balón", "3-6 conos"],
-    setup:
-      "Coloca 3-6 conos alrededor de la zona de trabajo y asigna cada color o número a un cono.",
-    instructions:
-      "La asociación es física: ScanPlay solo muestra la información que debes convertir en acción.",
-    engine: ENGINES.RANDOM,
-    stimulusModes: [STIMULUS_TYPES.COLOR, STIMULUS_TYPES.NUMBER],
-    colorIds: COLOR_IDS,
-    numberLimits: NORMAL_NUMBER_LIMITS,
+    id: MODE_IDS.DIRECTIONS,
+    name: "Direcciones",
+    icon: "DIR",
+    cardDescription: "Reacciona a la dirección mientras trabajas con balón.",
+    description: "Responde a la flecha con un control, conducción o pase orientado.",
+    renderType: STIMULUS_TYPES.DIRECTION,
+    directionIds: DIRECTION_IDS,
     defaults: {
-      stimulusType: STIMULUS_TYPES.COLOR,
-      selectedColorIds: COLOR_IDS,
-      numberFrom: "1",
-      numberTo: "10",
+      selectedDirectionIds: DIRECTION_IDS,
       intervalSec: 3,
       totalDurationSec: 60,
-    },
-  },
-  {
-    id: "orientedTouch",
-    name: "Control orientado",
-    icon: "CTRL",
-    cardDescription: "Escanea antes de recibir y orienta el primer control hacia el objetivo.",
-    description: "Escanea antes de recibir y orienta el primer control hacia el objetivo.",
-    objective: "Escaneo + primer control",
-    equipment: ["Balón", "Pared", "3-4 conos o puertas"],
-    setup:
-      "Coloca el móvil detrás de ti y varios conos o puertas a tu alrededor. Pasa contra la pared, escanea mientras viaja el balón y orienta el siguiente control hacia el estímulo indicado.",
-    instructions:
-      "El estímulo marca hacia dónde orientar el control. La app no evalúa la ejecución.",
-    engine: ENGINES.RANDOM,
-    stimulusModes: [STIMULUS_TYPES.COLOR, STIMULUS_TYPES.NUMBER],
-    colorIds: COLOR_IDS,
-    numberLimits: NORMAL_NUMBER_LIMITS,
-    defaults: {
-      stimulusType: STIMULUS_TYPES.COLOR,
-      selectedColorIds: COLOR_IDS,
-      numberFrom: "1",
-      numberTo: "10",
-      intervalSec: 3,
-      totalDurationSec: 60,
-    },
-  },
-  {
-    id: "passCount",
-    name: "Pases por número",
-    icon: "123",
-    cardDescription: "Memoriza el número y completa pases antes de volver a mirar.",
-    description:
-      "Memoriza el número y completa esa cantidad de pases antes de volver a buscar información.",
-    objective: "Escaneo + memoria durante el pase",
-    equipment: ["Balón", "Pared o compañero"],
-    setup:
-      "Trabaja con una pared o compañero. El número indica cuántos pases debes completar durante cada reto.",
-    instructions:
-      "ScanPlay no detecta los pases: muestra el reto y tú cuentas la ejecución físicamente.",
-    engine: ENGINES.PASS_COUNT,
-    numberLimits: PASS_NUMBER_LIMITS,
-    defaults: {
-      numberFrom: "1",
-      numberTo: "5",
-      challengeSec: 7,
-      totalDurationSec: 60,
-    },
-  },
-  {
-    id: "conflict",
-    name: "Conflicto",
-    icon: "COLOR",
-    cardDescription: "Resuelve el conflicto entre palabra y color mientras controlas el balón.",
-    description:
-      "Resuelve el conflicto entre palabra y color mientras mantienes el control del balón.",
-    objective: "Escaneo + control inhibitorio",
-    equipment: ["Balón", "Pared o espacio de conducción"],
-    setup:
-      "Coloca el móvil en una posición que te obligue a escanear sin perder el control técnico.",
-    instructions:
-      "Sigue la regla seleccionada. Si la palabra AZUL aparece escrita en rojo, la respuesta depende de si atiendes a palabra o a color de letra.",
-    engine: ENGINES.CONFLICT,
-    colorIds: CONFLICT_COLOR_IDS,
-    defaults: {
-      selectedColorIds: CONFLICT_COLOR_IDS,
-      responseRule: RESPONSE_RULES.INK,
-      intervalSec: 2,
-      totalDurationSec: 60,
-    },
-  },
-  {
-    id: "sequence",
-    name: "Secuencia",
-    icon: "SEQ",
-    cardDescription: "Memoriza colores y repite la secuencia al terminar.",
-    description:
-      "Memoriza estímulos mientras trabajas con balón y repite la secuencia al terminar.",
-    objective: "Escaneo + memoria de información",
-    equipment: ["Balón", "3-6 conos"],
-    setup:
-      "Asigna colores a conos. Mientras aparece la secuencia, conduce o pasa; cuando veas REPITE, reproduce físicamente el orden.",
-    instructions:
-      "No hay puntuación automática. La app muestra la solución para que puedas comprobar la secuencia.",
-    engine: ENGINES.SEQUENCE,
-    colorIds: COLOR_IDS,
-    defaults: {
-      selectedColorIds: COLOR_IDS,
-      sequenceLength: 3,
-      stimulusSpeedSec: 2,
-      recallSec: 10,
-      rounds: 5,
     },
   },
 ];
 
 const state = {
   currentView: "home",
-  currentExerciseId: null,
-  exerciseConfigs: createInitialConfigs(),
+  currentModeId: null,
+  modeConfigs: createInitialConfigs(),
   activeSession: null,
   sessionToken: 0,
   sessionTimers: [],
@@ -230,38 +110,44 @@ function cloneConfig(config) {
 function createInitialConfigs() {
   const configs = {};
 
-  EXERCISES.forEach((exercise) => {
-    configs[exercise.id] = cloneConfig(exercise.defaults);
+  MODES.forEach((mode) => {
+    configs[mode.id] = cloneConfig(mode.defaults);
   });
 
   return configs;
 }
 
-function getExercise(exerciseId) {
-  return EXERCISES.find((exercise) => exercise.id === exerciseId);
+function getMode(modeId) {
+  return MODES.find((mode) => mode.id === modeId);
 }
 
-function getCurrentExercise() {
-  return getExercise(state.currentExerciseId);
+function getCurrentMode() {
+  return getMode(state.currentModeId);
 }
 
 function getCurrentConfig() {
-  return state.exerciseConfigs[state.currentExerciseId];
+  return state.modeConfigs[state.currentModeId];
 }
 
 function getColor(colorId) {
   return COLORS.find((color) => color.id === colorId);
 }
 
-function getAllowedSelectedColorIds(exercise, config) {
-  return exercise.colorIds.filter((colorId) => config.selectedColorIds.includes(colorId));
+function getDirection(directionId) {
+  return DIRECTIONS.find((direction) => direction.id === directionId);
+}
+
+function getSelectedColorIds(mode, config) {
+  return mode.colorIds.filter((colorId) => config.selectedColorIds.includes(colorId));
+}
+
+function getSelectedDirectionIds(mode, config) {
+  return mode.directionIds.filter((directionId) =>
+    config.selectedDirectionIds.includes(directionId)
+  );
 }
 
 function getStimulusKey(value) {
-  if (value && typeof value === "object") {
-    return value.key;
-  }
-
   return String(value);
 }
 
@@ -330,100 +216,36 @@ function isAllowedOption(options, value) {
   });
 }
 
-function validateExerciseConfig(exercise, config) {
-  if (exercise.engine === ENGINES.RANDOM) {
-    if (config.stimulusType === STIMULUS_TYPES.COLOR) {
-      const selectedColorIds = getAllowedSelectedColorIds(exercise, config);
-
-      if (selectedColorIds.length < 2) {
-        return { isValid: false, message: "Selecciona al menos 2 colores." };
-      }
-    } else {
-      const range = validateNumberRange(config.numberFrom, config.numberTo, exercise.numberLimits);
-
-      if (!range.isValid) {
-        return { isValid: false, message: range.message };
-      }
+function validateModeConfig(mode, config) {
+  if (mode.id === MODE_IDS.COLORS) {
+    if (getSelectedColorIds(mode, config).length < 2) {
+      return { isValid: false, message: "Selecciona al menos 2 colores." };
     }
-
-    if (!isAllowedOption(INTERVAL_OPTIONS, config.intervalSec)) {
-      return { isValid: false, message: "Elige un intervalo válido." };
-    }
-
-    if (!isAllowedOption(DURATION_OPTIONS, config.totalDurationSec)) {
-      return { isValid: false, message: "Elige un tiempo total válido." };
-    }
-
-    return { isValid: true, message: "" };
   }
 
-  if (exercise.engine === ENGINES.PASS_COUNT) {
-    const range = validateNumberRange(config.numberFrom, config.numberTo, exercise.numberLimits);
+  if (mode.id === MODE_IDS.NUMBERS) {
+    const range = validateNumberRange(config.numberFrom, config.numberTo, mode.numberLimits);
 
     if (!range.isValid) {
       return { isValid: false, message: range.message };
     }
-
-    if (!isAllowedOption(CHALLENGE_TIME_OPTIONS, config.challengeSec)) {
-      return { isValid: false, message: "Elige un tiempo por reto válido." };
-    }
-
-    if (!isAllowedOption(DURATION_OPTIONS, config.totalDurationSec)) {
-      return { isValid: false, message: "Elige un tiempo total válido." };
-    }
-
-    return { isValid: true, message: "" };
   }
 
-  if (exercise.engine === ENGINES.CONFLICT) {
-    const selectedColorIds = getAllowedSelectedColorIds(exercise, config);
-
-    if (selectedColorIds.length < 2) {
-      return { isValid: false, message: "Selecciona al menos 2 colores." };
+  if (mode.id === MODE_IDS.DIRECTIONS) {
+    if (getSelectedDirectionIds(mode, config).length < 2) {
+      return { isValid: false, message: "Selecciona al menos 2 direcciones." };
     }
-
-    if (![RESPONSE_RULES.INK, RESPONSE_RULES.WORD].includes(config.responseRule)) {
-      return { isValid: false, message: "Elige una regla válida." };
-    }
-
-    if (!isAllowedOption(INTERVAL_OPTIONS, config.intervalSec)) {
-      return { isValid: false, message: "Elige un intervalo válido." };
-    }
-
-    if (!isAllowedOption(DURATION_OPTIONS, config.totalDurationSec)) {
-      return { isValid: false, message: "Elige un tiempo total válido." };
-    }
-
-    return { isValid: true, message: "" };
   }
 
-  if (exercise.engine === ENGINES.SEQUENCE) {
-    const selectedColorIds = getAllowedSelectedColorIds(exercise, config);
-
-    if (selectedColorIds.length < 2) {
-      return { isValid: false, message: "Selecciona al menos 2 colores." };
-    }
-
-    if (!isAllowedOption(SEQUENCE_LENGTH_OPTIONS, config.sequenceLength)) {
-      return { isValid: false, message: "Elige una longitud válida." };
-    }
-
-    if (!isAllowedOption(STIMULUS_SPEED_OPTIONS, config.stimulusSpeedSec)) {
-      return { isValid: false, message: "Elige una velocidad válida." };
-    }
-
-    if (!isAllowedOption(RECALL_TIME_OPTIONS, config.recallSec)) {
-      return { isValid: false, message: "Elige un tiempo para repetir válido." };
-    }
-
-    if (!isAllowedOption(ROUND_OPTIONS, config.rounds)) {
-      return { isValid: false, message: "Elige un número de rondas válido." };
-    }
-
-    return { isValid: true, message: "" };
+  if (!isAllowedOption(INTERVAL_OPTIONS, config.intervalSec)) {
+    return { isValid: false, message: "Elige un intervalo válido." };
   }
 
-  return { isValid: false, message: "Ejercicio no disponible." };
+  if (!isAllowedOption(DURATION_OPTIONS, config.totalDurationSec)) {
+    return { isValid: false, message: "Elige un tiempo total válido." };
+  }
+
+  return { isValid: true, message: "" };
 }
 
 function createElement(tagName, className, text) {
@@ -450,109 +272,54 @@ function createButton(className, text, onClick) {
 }
 
 function renderHome() {
-  elements.exerciseCards.innerHTML = "";
+  elements.modeCards.innerHTML = "";
 
-  EXERCISES.forEach((exercise) => {
-    const card = createButton("exercise-card", "", () => openExercise(exercise.id));
-    const icon = createElement("span", "exercise-icon", exercise.icon);
-    const copy = createElement("span", "exercise-copy");
-    const title = createElement("h3", "", exercise.name);
-    const description = createElement("p", "", exercise.cardDescription);
+  MODES.forEach((mode) => {
+    const card = createButton("mode-card", "", () => openMode(mode.id));
+    const icon = createElement("span", "mode-icon", mode.icon);
+    const copy = createElement("span", "mode-copy");
+    const title = createElement("h3", "", mode.name);
+    const description = createElement("p", "", mode.cardDescription);
 
     copy.append(title, description);
     card.append(icon, copy);
-    card.setAttribute("aria-label", `${exercise.name}. ${exercise.cardDescription}`);
+    card.setAttribute("aria-label", `${mode.name}. ${mode.cardDescription}`);
 
-    elements.exerciseCards.appendChild(card);
+    elements.modeCards.appendChild(card);
   });
 }
 
-function renderExerciseConfig() {
-  const exercise = getCurrentExercise();
+function renderModeConfig() {
+  const mode = getCurrentMode();
   const config = getCurrentConfig();
 
-  if (!exercise || !config) {
+  if (!mode || !config) {
     showHome();
     return;
   }
 
-  elements.exerciseTitle.textContent = exercise.name;
-  elements.exerciseDescription.textContent = exercise.description;
-  elements.exerciseObjective.textContent = exercise.objective;
-  elements.exerciseEquipment.textContent = exercise.equipment.join(" + ");
-  elements.setupText.textContent = exercise.setup || "";
-  elements.setupSection.hidden = !exercise.setup;
-  elements.instructionsText.textContent = exercise.instructions || "";
-  elements.instructionsSection.hidden = !exercise.instructions;
+  elements.modeTitle.textContent = mode.name;
+  elements.modeDescription.textContent = mode.description;
   elements.configControls.innerHTML = "";
 
-  if (exercise.stimulusModes && exercise.stimulusModes.length > 1) {
-    renderStimulusTypeControl(exercise, config);
+  if (mode.id === MODE_IDS.COLORS) {
+    renderColorSelector(mode, config);
   }
 
-  if (shouldShowColorSelector(exercise, config)) {
-    renderColorSelector(exercise, config);
+  if (mode.id === MODE_IDS.NUMBERS) {
+    renderNumberRange(mode, config);
   }
 
-  if (shouldShowNumberRange(exercise, config)) {
-    renderNumberRange(exercise, config);
+  if (mode.id === MODE_IDS.DIRECTIONS) {
+    renderDirectionSelector(mode, config);
   }
 
-  if (exercise.engine === ENGINES.CONFLICT) {
-    renderResponseRuleControl(config);
-  }
-
-  if (exercise.engine === ENGINES.RANDOM || exercise.engine === ENGINES.CONFLICT) {
-    renderOptionGroup("Segundos", INTERVAL_OPTIONS, config.intervalSec, (value) => {
-      config.intervalSec = value;
-      renderExerciseConfig();
-    });
-    renderDurationControl(config);
-  }
-
-  if (exercise.engine === ENGINES.PASS_COUNT) {
-    renderOptionGroup("Tiempo por reto", CHALLENGE_TIME_OPTIONS, config.challengeSec, (value) => {
-      config.challengeSec = value;
-      renderExerciseConfig();
-    }, "compact-options");
-    renderDurationControl(config);
-  }
-
-  if (exercise.engine === ENGINES.SEQUENCE) {
-    renderOptionGroup("Longitud de secuencia", SEQUENCE_LENGTH_OPTIONS, config.sequenceLength, (value) => {
-      config.sequenceLength = value;
-      renderExerciseConfig();
-    }, "compact-options");
-    renderOptionGroup("Velocidad de estímulo", STIMULUS_SPEED_OPTIONS, config.stimulusSpeedSec, (value) => {
-      config.stimulusSpeedSec = value;
-      renderExerciseConfig();
-    }, "compact-options");
-    renderOptionGroup("Tiempo para repetir", RECALL_TIME_OPTIONS, config.recallSec, (value) => {
-      config.recallSec = value;
-      renderExerciseConfig();
-    }, "compact-options");
-    renderOptionGroup("Rondas", ROUND_OPTIONS, config.rounds, (value) => {
-      config.rounds = value;
-      renderExerciseConfig();
-    }, "compact-options");
-  }
-
+  renderOptionGroup("Intervalo", INTERVAL_OPTIONS, config.intervalSec, (value) => {
+    config.intervalSec = value;
+    renderModeConfig();
+  });
+  renderDurationControl(config);
   updateStartButton();
-}
-
-function shouldShowColorSelector(exercise, config) {
-  return (
-    exercise.engine === ENGINES.CONFLICT ||
-    exercise.engine === ENGINES.SEQUENCE ||
-    (exercise.engine === ENGINES.RANDOM && config.stimulusType === STIMULUS_TYPES.COLOR)
-  );
-}
-
-function shouldShowNumberRange(exercise, config) {
-  return (
-    exercise.engine === ENGINES.PASS_COUNT ||
-    (exercise.engine === ENGINES.RANDOM && config.stimulusType === STIMULUS_TYPES.NUMBER)
-  );
 }
 
 function renderControlGroup(titleText) {
@@ -565,82 +332,86 @@ function renderControlGroup(titleText) {
   return group;
 }
 
-function renderStimulusTypeControl(exercise, config) {
-  const group = renderControlGroup("Tipo de estímulo");
-  const switcher = createElement("div", "mode-switch");
-
-  switcher.setAttribute("role", "group");
-  switcher.setAttribute("aria-label", "Tipo de estímulo");
-
-  exercise.stimulusModes.forEach((mode) => {
-    const label = mode === STIMULUS_TYPES.COLOR ? "Colores" : "Números";
-    const button = createButton("mode-button", label, () => {
-      config.stimulusType = mode;
-      renderExerciseConfig();
-    });
-    const isSelected = config.stimulusType === mode;
-
-    button.classList.toggle("is-selected", isSelected);
-    button.setAttribute("aria-pressed", String(isSelected));
-    switcher.appendChild(button);
-  });
-
-  group.appendChild(switcher);
-}
-
-function renderColorSelector(exercise, config) {
+function renderColorSelector(mode, config) {
   const group = createElement("div", "control-group");
   const line = createElement("div", "section-line");
   const title = createElement("h3", "", "Colores");
-  const selectedColorIds = getAllowedSelectedColorIds(exercise, config);
-  const count = createElement("span", "selection-count", `${selectedColorIds.length}/${exercise.colorIds.length}`);
+  const selectedColorIds = getSelectedColorIds(mode, config);
+  const count = createElement("span", "selection-count", `${selectedColorIds.length}/${mode.colorIds.length}`);
   const grid = createElement("div", "color-grid");
 
   line.append(title, count);
   group.append(line, grid);
 
-  exercise.colorIds.forEach((colorId) => {
+  mode.colorIds.forEach((colorId) => {
     const color = getColor(colorId);
     const isSelected = config.selectedColorIds.includes(colorId);
     const button = createButton("color-card", "", () => {
-      toggleConfigColor(exercise, config, colorId);
-      renderExerciseConfig();
+      config.selectedColorIds = toggleArrayItem(config.selectedColorIds, colorId);
+      renderModeConfig();
     });
+    const swatch = createElement("span", "color-swatch");
     const name = createElement("span", "color-name", color.label);
 
     button.dataset.light = String(color.isLight);
     button.style.setProperty("--color", color.hex);
-    button.style.setProperty("--color-text", color.isLight ? "#151815" : "#ffffff");
     button.classList.toggle("is-selected", isSelected);
     button.setAttribute("aria-pressed", String(isSelected));
     button.setAttribute("aria-label", `${color.label}, ${isSelected ? "activo" : "inactivo"}`);
-    button.appendChild(name);
+    button.append(swatch, name);
     grid.appendChild(button);
   });
 
   elements.configControls.appendChild(group);
 }
 
-function toggleConfigColor(exercise, config, colorId) {
-  if (!exercise.colorIds.includes(colorId)) {
-    return;
-  }
+function renderDirectionSelector(mode, config) {
+  const group = createElement("div", "control-group");
+  const line = createElement("div", "section-line");
+  const title = createElement("h3", "", "Direcciones");
+  const selectedDirectionIds = getSelectedDirectionIds(mode, config);
+  const count = createElement(
+    "span",
+    "selection-count",
+    `${selectedDirectionIds.length}/${mode.directionIds.length}`
+  );
+  const grid = createElement("div", "direction-grid");
 
-  if (config.selectedColorIds.includes(colorId)) {
-    config.selectedColorIds = config.selectedColorIds.filter((id) => id !== colorId);
-  } else {
-    config.selectedColorIds = [...config.selectedColorIds, colorId];
-  }
+  line.append(title, count);
+  group.append(line, grid);
+
+  mode.directionIds.forEach((directionId) => {
+    const direction = getDirection(directionId);
+    const isSelected = config.selectedDirectionIds.includes(directionId);
+    const button = createButton("direction-card", "", () => {
+      config.selectedDirectionIds = toggleArrayItem(config.selectedDirectionIds, directionId);
+      renderModeConfig();
+    });
+    const symbol = createElement("span", "direction-symbol", direction.symbol);
+    const name = createElement("span", "direction-name", direction.label);
+
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-pressed", String(isSelected));
+    button.setAttribute("aria-label", `${direction.label}, ${isSelected ? "activa" : "inactiva"}`);
+    button.append(symbol, name);
+    grid.appendChild(button);
+  });
+
+  elements.configControls.appendChild(group);
 }
 
-function renderNumberRange(exercise, config) {
+function toggleArrayItem(items, item) {
+  return items.includes(item) ? items.filter((value) => value !== item) : [...items, item];
+}
+
+function renderNumberRange(mode, config) {
   const group = renderControlGroup("Rango");
   const range = createElement("div", "number-range");
-  const fromField = createNumberField("Desde", config.numberFrom, exercise.numberLimits, (value) => {
+  const fromField = createNumberField("Desde", config.numberFrom, mode.numberLimits, (value) => {
     config.numberFrom = value;
     updateStartButton();
   });
-  const toField = createNumberField("Hasta", config.numberTo, exercise.numberLimits, (value) => {
+  const toField = createNumberField("Hasta", config.numberTo, mode.numberLimits, (value) => {
     config.numberTo = value;
     updateStartButton();
   });
@@ -669,39 +440,13 @@ function createNumberField(labelText, value, limits, onInput) {
   return label;
 }
 
-function renderResponseRuleControl(config) {
-  const group = renderControlGroup("Responde a");
-  const switcher = createElement("div", "mode-switch");
-  const options = [
-    { label: "Color de la letra", value: RESPONSE_RULES.INK },
-    { label: "Palabra", value: RESPONSE_RULES.WORD },
-  ];
-
-  switcher.setAttribute("role", "group");
-  switcher.setAttribute("aria-label", "Regla de respuesta");
-
-  options.forEach((option) => {
-    const button = createButton("mode-button", option.label, () => {
-      config.responseRule = option.value;
-      renderExerciseConfig();
-    });
-    const isSelected = config.responseRule === option.value;
-
-    button.classList.toggle("is-selected", isSelected);
-    button.setAttribute("aria-pressed", String(isSelected));
-    switcher.appendChild(button);
-  });
-
-  group.appendChild(switcher);
-}
-
-function renderOptionGroup(titleText, options, selectedValue, onSelect, extraClassName = "") {
+function renderOptionGroup(titleText, options, selectedValue, onSelect) {
   const group = renderControlGroup(titleText);
-  const grid = createElement("div", `option-grid ${extraClassName}`.trim());
+  const grid = createElement("div", "option-grid");
 
   options.forEach((option) => {
     const value = typeof option === "object" ? option.value : option;
-    const label = typeof option === "object" ? option.label : `${option}s`;
+    const label = typeof option === "object" ? option.label : `${option}"`;
     const button = createButton("option-button", label, () => {
       onSelect(value);
     });
@@ -716,17 +461,17 @@ function renderOptionGroup(titleText, options, selectedValue, onSelect, extraCla
 }
 
 function renderDurationControl(config) {
-  renderOptionGroup("Tiempo total", DURATION_OPTIONS, config.totalDurationSec, (value) => {
+  renderOptionGroup("Duración", DURATION_OPTIONS, config.totalDurationSec, (value) => {
     config.totalDurationSec = value;
-    renderExerciseConfig();
+    renderModeConfig();
   });
 }
 
 function updateStartButton() {
-  const exercise = getCurrentExercise();
+  const mode = getCurrentMode();
   const config = getCurrentConfig();
-  const validation = exercise && config
-    ? validateExerciseConfig(exercise, config)
+  const validation = mode && config
+    ? validateModeConfig(mode, config)
     : { isValid: false, message: "" };
 
   elements.validationMessage.textContent = validation.message;
@@ -737,79 +482,28 @@ function buildNumberValues(config, limits) {
   return validateNumberRange(config.numberFrom, config.numberTo, limits).values;
 }
 
-function buildConflictStimuli(colorIds) {
-  const stimuli = [];
+function buildSessionConfig(mode, config) {
+  let values = [];
 
-  colorIds.forEach((wordColorId) => {
-    colorIds.forEach((inkColorId) => {
-      if (wordColorId === inkColorId) {
-        return;
-      }
-
-      stimuli.push({
-        key: `${wordColorId}:${inkColorId}`,
-        wordColorId,
-        inkColorId,
-      });
-    });
-  });
-
-  return stimuli;
-}
-
-function buildSessionConfig(exercise, config) {
-  if (exercise.engine === ENGINES.RANDOM) {
-    const values =
-      config.stimulusType === STIMULUS_TYPES.COLOR
-        ? getAllowedSelectedColorIds(exercise, config)
-        : buildNumberValues(config, exercise.numberLimits);
-
-    return {
-      kind: "timed",
-      exerciseId: exercise.id,
-      renderType: config.stimulusType,
-      values,
-      intervalMs: config.intervalSec * 1000,
-      totalDurationMs: config.totalDurationSec * 1000,
-    };
+  if (mode.id === MODE_IDS.COLORS) {
+    values = getSelectedColorIds(mode, config);
   }
 
-  if (exercise.engine === ENGINES.PASS_COUNT) {
-    return {
-      kind: "timed",
-      exerciseId: exercise.id,
-      renderType: STIMULUS_TYPES.NUMBER,
-      values: buildNumberValues(config, exercise.numberLimits),
-      intervalMs: config.challengeSec * 1000,
-      totalDurationMs: config.totalDurationSec * 1000,
-    };
+  if (mode.id === MODE_IDS.NUMBERS) {
+    values = buildNumberValues(config, mode.numberLimits);
   }
 
-  if (exercise.engine === ENGINES.CONFLICT) {
-    const selectedColorIds = getAllowedSelectedColorIds(exercise, config);
-
-    return {
-      kind: "timed",
-      exerciseId: exercise.id,
-      renderType: ENGINES.CONFLICT,
-      values: buildConflictStimuli(selectedColorIds),
-      intervalMs: config.intervalSec * 1000,
-      totalDurationMs: config.totalDurationSec * 1000,
-      responseRule: config.responseRule,
-    };
+  if (mode.id === MODE_IDS.DIRECTIONS) {
+    values = getSelectedDirectionIds(mode, config);
   }
 
   return {
-    kind: "sequence",
-    exerciseId: exercise.id,
-    colorIds: getAllowedSelectedColorIds(exercise, config),
-    sequenceLength: config.sequenceLength,
-    stimulusSpeedMs: config.stimulusSpeedSec * 1000,
-    recallMs: config.recallSec * 1000,
-    rounds: config.rounds,
-    solutionVisibleMs: SOLUTION_VISIBLE_MS,
-    roundIndex: 0,
-    currentSequence: [],
+    kind: "timed",
+    modeId: mode.id,
+    renderType: mode.renderType,
+    values,
+    intervalMs: config.intervalSec * 1000,
+    totalDurationMs: config.totalDurationSec * 1000,
   };
 }
 
@@ -841,7 +535,7 @@ function showHome() {
   clearSessionTimers();
   state.sessionToken += 1;
   state.activeSession = null;
-  state.currentExerciseId = null;
+  state.currentModeId = null;
   state.currentView = "home";
   elements.homeView.hidden = false;
   elements.configView.hidden = true;
@@ -849,17 +543,17 @@ function showHome() {
   resetTrainingSurface();
 }
 
-function openExercise(exerciseId) {
+function openMode(modeId) {
   clearSessionTimers();
   state.sessionToken += 1;
   state.activeSession = null;
-  state.currentExerciseId = exerciseId;
+  state.currentModeId = modeId;
   state.currentView = "config";
   elements.homeView.hidden = true;
   elements.configView.hidden = false;
   elements.trainingView.hidden = true;
   resetTrainingSurface();
-  renderExerciseConfig();
+  renderModeConfig();
 }
 
 function showTrainingView() {
@@ -876,12 +570,12 @@ function stopSession(targetView = "config") {
   state.activeSession = null;
   resetTrainingSurface();
 
-  if (targetView === "config" && state.currentExerciseId) {
+  if (targetView === "config" && state.currentModeId) {
     state.currentView = "config";
     elements.homeView.hidden = true;
     elements.configView.hidden = false;
     elements.trainingView.hidden = true;
-    renderExerciseConfig();
+    renderModeConfig();
     return;
   }
 
@@ -903,51 +597,45 @@ function setTrainingSurface(backgroundColor, isLight = false) {
   elements.trainingView.style.backgroundColor = backgroundColor;
   elements.trainingView.style.setProperty(
     "--training-control-bg",
-    isLight ? "rgba(21, 24, 21, 0.16)" : "rgba(0, 0, 0, 0.24)"
+    isLight ? "rgba(15, 19, 17, 0.14)" : "rgba(255, 255, 255, 0.12)"
   );
   elements.trainingView.style.setProperty(
     "--training-control-fg",
-    isLight ? "#151815" : "#ffffff"
+    isLight ? "#111411" : "#ffffff"
   );
 }
 
-function startExerciseSession() {
-  const exercise = getCurrentExercise();
+function startSession() {
+  const mode = getCurrentMode();
   const config = getCurrentConfig();
 
-  if (!exercise || !config) {
+  if (!mode || !config) {
     return;
   }
 
-  const validation = validateExerciseConfig(exercise, config);
+  const validation = validateModeConfig(mode, config);
 
   if (!validation.isValid) {
     updateStartButton();
     return;
   }
 
-  const sessionConfig = buildSessionConfig(exercise, config);
+  const sessionConfig = buildSessionConfig(mode, config);
 
   clearSessionTimers();
   state.sessionToken += 1;
   state.activeSession = {
     ...sessionConfig,
     previousStimulus: null,
-    endsAt: performance.now() + (sessionConfig.totalDurationMs || 0),
+    endsAt: performance.now() + sessionConfig.totalDurationMs,
   };
 
   showTrainingView();
-
-  if (sessionConfig.kind === "sequence") {
-    startSequenceFlow();
-    return;
-  }
-
-  showNextTimedStimulus();
+  showNextStimulus();
   scheduleSessionTimer(() => stopSession("config"), sessionConfig.totalDurationMs);
 }
 
-function showNextTimedStimulus() {
+function showNextStimulus() {
   const session = state.activeSession;
 
   if (!session || session.kind !== "timed") {
@@ -957,11 +645,11 @@ function showNextTimedStimulus() {
   const stimulus = chooseNextValue(session.values, session.previousStimulus);
 
   session.previousStimulus = stimulus;
-  renderStimulus(session.renderType, stimulus, session);
-  scheduleNextTimedStimulus();
+  renderStimulus(session.renderType, stimulus);
+  scheduleNextStimulus();
 }
 
-function scheduleNextTimedStimulus() {
+function scheduleNextStimulus() {
   const session = state.activeSession;
 
   if (!session || session.kind !== "timed") {
@@ -974,10 +662,10 @@ function scheduleNextTimedStimulus() {
     return;
   }
 
-  scheduleSessionTimer(() => showNextTimedStimulus(), session.intervalMs);
+  scheduleSessionTimer(() => showNextStimulus(), session.intervalMs);
 }
 
-function renderStimulus(renderType, stimulus, session) {
+function renderStimulus(renderType, stimulus) {
   elements.stimulusRoot.textContent = "";
 
   if (renderType === STIMULUS_TYPES.COLOR) {
@@ -990,8 +678,8 @@ function renderStimulus(renderType, stimulus, session) {
     return;
   }
 
-  if (renderType === ENGINES.CONFLICT) {
-    renderConflictStimulus(stimulus, session);
+  if (renderType === STIMULUS_TYPES.DIRECTION) {
+    renderDirectionStimulus(stimulus);
   }
 }
 
@@ -1002,127 +690,26 @@ function renderColorStimulus(colorId) {
     return;
   }
 
-  elements.stimulusRoot.textContent = "";
   setTrainingSurface(color.hex, color.isLight);
 }
 
 function renderNumberStimulus(number) {
-  setTrainingSurface("#050505");
-  const numberElement = createElement("div", "number-stimulus", String(number));
-
-  elements.stimulusRoot.appendChild(numberElement);
+  setTrainingSurface("#000000");
+  elements.stimulusRoot.appendChild(createElement("div", "number-stimulus", String(number)));
 }
 
-function renderConflictStimulus(stimulus) {
-  const wordColor = getColor(stimulus.wordColorId);
-  const inkColor = getColor(stimulus.inkColorId);
+function renderDirectionStimulus(directionId) {
+  const direction = getDirection(directionId);
 
-  if (!wordColor || !inkColor) {
+  if (!direction) {
     return;
   }
 
-  setTrainingSurface("#050505");
-  const wordElement = createElement("div", "conflict-word", wordColor.word);
+  const directionElement = createElement("div", "direction-stimulus", direction.symbol);
 
-  wordElement.classList.toggle("is-long-word", wordColor.word.length > 6);
-  wordElement.style.color = inkColor.hex;
-  elements.stimulusRoot.appendChild(wordElement);
-}
-
-function startSequenceFlow() {
-  const session = state.activeSession;
-
-  if (!session || session.kind !== "sequence") {
-    return;
-  }
-
-  session.roundIndex = 0;
-  runNextSequenceRound();
-}
-
-function runNextSequenceRound() {
-  const session = state.activeSession;
-
-  if (!session || session.kind !== "sequence") {
-    return;
-  }
-
-  if (session.roundIndex >= session.rounds) {
-    stopSession("config");
-    return;
-  }
-
-  session.roundIndex += 1;
-  session.currentSequence = buildColorSequence(session.colorIds, session.sequenceLength);
-  renderSequenceItem(0);
-}
-
-function buildColorSequence(colorIds, length) {
-  const sequence = [];
-  let previousColorId = null;
-
-  for (let index = 0; index < length; index += 1) {
-    const colorId = chooseNextValue(colorIds, previousColorId);
-
-    sequence.push(colorId);
-    previousColorId = colorId;
-  }
-
-  return sequence;
-}
-
-function renderSequenceItem(index) {
-  const session = state.activeSession;
-
-  if (!session || session.kind !== "sequence") {
-    return;
-  }
-
-  if (index >= session.currentSequence.length) {
-    renderRecallPhase();
-    scheduleSessionTimer(() => renderSolutionPhase(), session.recallMs);
-    return;
-  }
-
-  renderColorStimulus(session.currentSequence[index]);
-  scheduleSessionTimer(() => renderSequenceItem(index + 1), session.stimulusSpeedMs);
-}
-
-function renderRecallPhase() {
-  setTrainingSurface("#050505");
-  elements.stimulusRoot.textContent = "";
-  elements.stimulusRoot.appendChild(createElement("div", "phase-title", "REPITE"));
-}
-
-function renderSolutionPhase() {
-  const session = state.activeSession;
-
-  if (!session || session.kind !== "sequence") {
-    return;
-  }
-
-  setTrainingSurface("#050505");
-  elements.stimulusRoot.textContent = "";
-
-  const panel = createElement("div", "solution-panel");
-  const title = createElement("div", "phase-title", "SOLUCIÓN");
-  const row = createElement("div", "solution-row");
-
-  session.currentSequence.forEach((colorId, index) => {
-    const color = getColor(colorId);
-    const dot = createElement("span", "solution-dot");
-
-    dot.style.setProperty("--dot-color", color ? color.hex : "#ffffff");
-    row.appendChild(dot);
-
-    if (index < session.currentSequence.length - 1) {
-      row.appendChild(createElement("span", "solution-arrow", "→"));
-    }
-  });
-
-  panel.append(title, row);
-  elements.stimulusRoot.appendChild(panel);
-  scheduleSessionTimer(() => runNextSequenceRound(), session.solutionVisibleMs);
+  setTrainingSurface("#000000");
+  directionElement.setAttribute("aria-label", direction.label);
+  elements.stimulusRoot.appendChild(directionElement);
 }
 
 function init() {
@@ -1130,16 +717,10 @@ function init() {
     homeView: document.getElementById("homeView"),
     configView: document.getElementById("configView"),
     trainingView: document.getElementById("trainingView"),
-    exerciseCards: document.getElementById("exerciseCards"),
-    backToExercisesButton: document.getElementById("backToExercisesButton"),
-    exerciseTitle: document.getElementById("exerciseTitle"),
-    exerciseDescription: document.getElementById("exerciseDescription"),
-    exerciseObjective: document.getElementById("exerciseObjective"),
-    exerciseEquipment: document.getElementById("exerciseEquipment"),
-    setupSection: document.getElementById("setupSection"),
-    setupText: document.getElementById("setupText"),
-    instructionsSection: document.getElementById("instructionsSection"),
-    instructionsText: document.getElementById("instructionsText"),
+    modeCards: document.getElementById("modeCards"),
+    backToHomeButton: document.getElementById("backToHomeButton"),
+    modeTitle: document.getElementById("modeTitle"),
+    modeDescription: document.getElementById("modeDescription"),
     configControls: document.getElementById("configControls"),
     validationMessage: document.getElementById("validationMessage"),
     startButton: document.getElementById("startButton"),
@@ -1149,8 +730,8 @@ function init() {
 
   renderHome();
 
-  elements.backToExercisesButton.addEventListener("click", () => showHome());
-  elements.startButton.addEventListener("click", startExerciseSession);
+  elements.backToHomeButton.addEventListener("click", () => showHome());
+  elements.startButton.addEventListener("click", startSession);
   elements.backButton.addEventListener("click", () => stopSession("config"));
 }
 
